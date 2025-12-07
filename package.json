@@ -1,0 +1,10 @@
+{
+  "name": "rotbae-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build:all": "node build-all.js",
+    "build:stream": "cd stream && npm install && npm run build",
+    "dev:stream": "cd stream && npm run dev"
+  }
+}
