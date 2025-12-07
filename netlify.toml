@@ -1,72 +1,24 @@
 # Netlify configuration for monorepo
 # Single deployment serving all subdomains from dist/
-# Each subdomain is routed to its corresponding folder using Host-based redirects
+# Routing is handled by Edge Function (netlify/edge-functions/subdomain-router.ts)
 
 [build]
   command = "npm install && npm run build:all"
   publish = "dist"
 
-# Redirect rules for each subdomain
-# Routes requests to the appropriate subdomain folder based on Host header
+# Edge Functions handle Host-based routing
+# See netlify/edge-functions/subdomain-router.ts
+[[edge_functions]]
+  function = "subdomain-router"
+  path = "/*"
 
-# stream.rotbae.com - root path
-[[redirects]]
-  from = "/"
-  to = "/stream/index.html"
-  status = 200
-  conditions = {Host = ["stream.rotbae.com"]}
-
-# stream.rotbae.com - all other paths
-[[redirects]]
-  from = "/*"
-  to = "/stream/:splat"
-  status = 200
-  force = true
-  conditions = {Host = ["stream.rotbae.com"]}
-
-# stream.rotbae.com - SPA routing (catch-all for client-side routes)
-# This handles paths that don't exist as files in /stream/
+# SPA routing fallback for each subdomain
+# These handle client-side routes that don't exist as files
 [[redirects]]
   from = "/stream/*"
   to = "/stream/index.html"
   status = 200
-  conditions = {Host = ["stream.rotbae.com"]}
-
-# rotbae.com (root domain) - root path
-[[redirects]]
-  from = "/"
-  to = "/stream/index.html"
-  status = 200
-  conditions = {Host = ["rotbae.com", "www.rotbae.com"]}
-
-# rotbae.com (root domain) - all other paths
-[[redirects]]
-  from = "/*"
-  to = "/stream/:splat"
-  status = 200
-  force = true
-  conditions = {Host = ["rotbae.com", "www.rotbae.com"]}
-
-# rotbae.com (root domain) - SPA routing (catch-all for client-side routes)
-[[redirects]]
-  from = "/stream/*"
-  to = "/stream/index.html"
-  status = 200
-  conditions = {Host = ["rotbae.com", "www.rotbae.com"]}
-
-# Example: Add more subdomains as you add projects
-# [[redirects]]
-#   from = "/*"
-#   to = "/admin/:splat"
-#   status = 200
-#   force = true
-#   conditions = {Host = ["admin.rotbae.com"]}
-#
-# [[redirects]]
-#   from = "/admin/*"
-#   to = "/admin/index.html"
-#   status = 200
-#   conditions = {Host = ["admin.rotbae.com"]}
+  force = false
 
 # Headers for security and performance
 [[headers]]

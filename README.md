@@ -42,14 +42,22 @@ The `build-all.js` script automatically:
 
 ## Netlify Deployment
 
-This monorepo uses a **single Netlify deployment** that serves all subdomains from the `dist/` folder using Host-based redirects.
+This monorepo uses a **single Netlify deployment** that serves all subdomains from the `dist/` folder using an Edge Function for Host-based routing.
 
 ### Setup in Netlify Dashboard
 
 1. **Create a single site** in Netlify dashboard
 2. **Connect the repository**
 3. **Configure DNS**: Set up catch-all DNS (wildcard DNS) to point `*.rotbae.com` to your Netlify site
-4. Netlify will automatically use the configuration from `netlify.toml`
+4. **Edge Functions**: No special GUI configuration needed! Edge Functions are automatically detected from the `netlify/edge-functions/` directory and declared in `netlify.toml`. They will deploy automatically with your site.
+
+5. **Add domain aliases** (optional but recommended for each subdomain):
+   - Go to Site settings → Domain management
+   - Add each subdomain (e.g., `stream.rotbae.com`) as a custom domain alias
+   - This enables direct access via the subdomain
+   - **Note**: Projects are also accessible via `rotbae.com/{project}/` without domain aliases
+
+6. Netlify will automatically use the configuration from `netlify.toml` and deploy the Edge Function
 
 ### How It Works
 
@@ -59,10 +67,11 @@ This monorepo uses a **single Netlify deployment** that serves all subdomains fr
 
 2. **Deploy**: Netlify serves from the `dist/` folder
 
-3. **Routing**: Host-based redirects in `netlify.toml` route each subdomain to its folder:
+3. **Routing**: An Edge Function (`netlify/edge-functions/subdomain-router.ts`) reads the `Host` header and rewrites requests:
    - `stream.rotbae.com/*` → serves from `dist/stream/*`
-   - SPA routing rules ensure client-side routes work correctly
-   - Catch-all DNS (`*.rotbae.com`) routes all subdomains to Netlify, and the Host header determines which folder to serve
+   - `rotbae.com/*` → serves from `dist/stream/*`
+   - SPA routing rules in `netlify.toml` handle client-side routes that don't exist as files
+   - Catch-all DNS (`*.rotbae.com`) routes all subdomains to Netlify, and the Edge Function uses the Host header to determine which folder to serve
 
 ### Benefits
 
@@ -83,25 +92,44 @@ To add a new project (e.g., `admin` for `admin.rotbae.com`):
    ```
    React, Typescript, Typescript + React Compiler, default options for whatever else.
 
-2. **The project will be automatically discovered** by `build-all.js` (no script changes needed)
+2. **Configure the base path** in the project's `vite.config.ts`:
+   ```typescript
+   export default defineConfig({
+     base: '/admin/',  // Must match the folder name
+     // ... rest of config
+   })
+   ```
+   This ensures assets load from `/admin/assets/` instead of `/assets/`, which is required for the monorepo structure.
 
-3. **Add redirect rules** to `netlify.toml`:
+3. **Update the Edge Function** (`netlify/edge-functions/subdomain-router.ts`):
+   - Add the subdomain to the `knownSubdomains` array:
+     ```typescript
+     const knownSubdomains = ['stream', 'admin']; // Add 'admin' here
+     ```
+   - Add the host mapping (optional, for direct subdomain access):
+     ```typescript
+     const hostMap: Record<string, string> = {
+       'rotbae.com': 'stream',
+       'www.rotbae.com': 'stream',
+       'stream.rotbae.com': 'stream',
+       'admin.rotbae.com': 'admin',  // Add this line
+     };
+     ```
+
+4. **Add SPA routing redirect** to `netlify.toml`:
    ```toml
-   # admin.rotbae.com
-   [[redirects]]
-     from = "/*"
-     to = "/admin/:splat"
-     status = 200
-     force = true
-     conditions = {Host = ["admin.rotbae.com"]}
-   
    # SPA routing for admin subdomain
    [[redirects]]
      from = "/admin/*"
      to = "/admin/index.html"
      status = 200
-     conditions = {Host = ["admin.rotbae.com"]}
      force = false
    ```
 
-That's it! The new subdomain will be automatically built and deployed with the next push. Since you're using catch-all DNS, no additional DNS or Netlify domain configuration is needed - the Host-based redirects will handle routing automatically.
+5. **Add domain alias in Netlify** (optional but recommended):
+   - Go to Netlify Dashboard → Site settings → Domain management
+   - Add `admin.rotbae.com` as a custom domain alias
+   - This allows direct access via the subdomain
+   - **Note**: You can also access it via `rotbae.com/admin/` without adding the domain alias
+
+That's it! The new subdomain will be automatically built and deployed with the next push. The Edge Function will handle routing based on the Host header, and assets will load correctly from the project's folder path.
