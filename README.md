@@ -78,8 +78,10 @@ To add a new project (e.g., `admin` for `admin.rotbae.com`):
 1. **Create the project folder** at the root:
    ```bash
    mkdir admin
-   # ... set up your project in admin/
+   cd admin
+   npm create vite@latest .
    ```
+   React, Typescript, Typescript + React Compiler, default options for whatever else.
 
 2. **The project will be automatically discovered** by `build-all.js` (no script changes needed)
 
