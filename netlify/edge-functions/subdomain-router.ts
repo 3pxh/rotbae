@@ -7,13 +7,14 @@ export default async (request: Request) => {
   const pathname = url.pathname;
 
   // List of known subdomain folders (update when adding new projects)
-  const knownSubdomains = ['stream', 'admin']; // Add new projects here
+  const knownSubdomains = ['stream', 'admin', 'drops']; // Add new projects here
   
   // Map of host patterns to subdomain folders
   const hostMap: Record<string, string> = {
     'rotbae.com': 'stream',
     'www.rotbae.com': 'stream',
     'stream.rotbae.com': 'stream',
+    'drops.rotbae.com': 'drops',
   };
 
   // Check if pathname already starts with a known subdomain folder
