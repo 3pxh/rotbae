@@ -86,8 +86,8 @@ Deno.serve(async (req) => {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: `Pixel (${x}, ${y})`,
-              description: `Purchase pixel at coordinates (${x}, ${y})`,
+              name: `pixel(${x}, ${y}) -> black`,
+              description: `turn the pixel @ (${x}, ${y}) black.`,
             },
             unit_amount: 100, // $1.00 in cents
           },

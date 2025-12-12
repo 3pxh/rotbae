@@ -15,10 +15,44 @@ function App() {
   const [editX, setEditX] = useState(0)
   const [editY, setEditY] = useState(0)
   const [isProcessing, setIsProcessing] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [processingArrow, setProcessingArrow] = useState(0)
+  const [loadingArrow, setLoadingArrow] = useState(0)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const isUpdatingFromSelectedPixel = useRef(false)
 
-  // Load pixels from Supabase on mount
+  // Parse URL coordinates from query parameters
+  const parseUrlCoordinates = (): { x: number; y: number } | null => {
+    const params = new URLSearchParams(window.location.search)
+    const xStr = params.get('x')
+    const yStr = params.get('y')
+    
+    if (xStr && yStr) {
+      const x = parseInt(xStr, 10)
+      const y = parseInt(yStr, 10)
+      if (!isNaN(x) && !isNaN(y) && x >= 0 && x < 1024 && y >= 0 && y < 1024) {
+        return { x, y }
+      }
+    }
+    return null
+  }
+
+  const updateUrl = (x: number, y: number) => {
+    // Use pathname + search to avoid issues with hash or other URL parts
+    const url = new URL(window.location.pathname + window.location.search, window.location.origin)
+    url.searchParams.set('x', x.toString())
+    url.searchParams.set('y', y.toString())
+    window.history.pushState({ x, y }, '', url.pathname + url.search)
+  }
+
+  const resetUrl = () => {
+    const url = new URL(window.location.href)
+    url.searchParams.delete('x')
+    url.searchParams.delete('y')
+    window.history.pushState({}, '', url.toString())
+  }
+
+  // Load pixels from Supabase on mount and handle URL routing
   useEffect(() => {
     loadPixels()
     
@@ -30,10 +64,80 @@ function App() {
     
     if (sessionId && x && y) {
       // Payment was successful, reload pixels to get the updated state
-      loadPixels()
-      // Clean up URL
-      window.history.replaceState({}, document.title, window.location.pathname)
+      // Don't show loading overlay on reload
+      const reloadPixels = async () => {
+        try {
+          const { data, error } = await supabase
+            .from('black_pixels')
+            .select('x, y')
+          if (error) throw error
+          const pixelsMap = new Map<string, Pixel>()
+          for (let x = 0; x < 1024; x++) {
+            for (let y = 0; y < 1024; y++) {
+              pixelsMap.set(`${x},${y}`, { x, y, color: 'white' })
+            }
+          }
+          if (data) {
+            data.forEach((pixel) => {
+              const key = `${pixel.x},${pixel.y}`
+              pixelsMap.set(key, { x: pixel.x, y: pixel.y, color: 'black' })
+            })
+          }
+          setPixels(pixelsMap)
+        } catch (error) {
+          console.error('Error reloading pixels:', error)
+        }
+      }
+      reloadPixels()
+      // Clean up URL - remove session_id but keep x and y if they're valid coordinates
+      const url = new URL(window.location.href)
+      url.searchParams.delete('session_id')
+      const xNum = parseInt(x, 10)
+      const yNum = parseInt(y, 10)
+      if (xNum >= 0 && xNum < 1024 && yNum >= 0 && yNum < 1024) {
+        // Keep x and y params, just remove session_id
+        window.history.replaceState({}, document.title, url.toString())
+      } else {
+        // Invalid coordinates, remove all params
+        url.searchParams.delete('x')
+        url.searchParams.delete('y')
+        window.history.replaceState({}, document.title, url.toString())
+      }
+    } else {
+      // Parse URL coordinates on initial load
+      const coords = parseUrlCoordinates()
+      if (coords) {
+        setSelectedPixel(coords)
+        setEditX(coords.x)
+        setEditY(coords.y)
+        setIsModalOpen(true)
+      } else {
+        // Check if there are invalid x/y params and clean them up
+        const xParam = params.get('x')
+        const yParam = params.get('y')
+        if (xParam || yParam) {
+          // Invalid coordinates, clean up URL
+          resetUrl()
+        }
+      }
     }
+
+    // Handle browser back/forward
+    const handlePopState = () => {
+      const coords = parseUrlCoordinates()
+      if (coords) {
+        setSelectedPixel(coords)
+        setEditX(coords.x)
+        setEditY(coords.y)
+        setIsModalOpen(true)
+      } else {
+        setIsModalOpen(false)
+        setSelectedPixel(null)
+      }
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
   }, [])
 
   // Update edit coordinates when selected pixel changes
@@ -41,15 +145,46 @@ function App() {
     if (selectedPixel) {
       setEditX(selectedPixel.x)
       setEditY(selectedPixel.y)
+      // Update URL immediately with selected pixel coordinates
+      updateUrl(selectedPixel.x, selectedPixel.y)
     }
   }, [selectedPixel])
 
+  // Track if we're updating from selectedPixel to prevent race condition
+  useEffect(() => {
+    if (selectedPixel) {
+      isUpdatingFromSelectedPixel.current = true
+      // Reset flag after state updates complete
+      setTimeout(() => {
+        isUpdatingFromSelectedPixel.current = false
+      }, 0)
+    }
+  }, [selectedPixel])
+
+  // Update URL when editX/editY are manually changed in the modal
+  useEffect(() => {
+    if (isModalOpen && selectedPixel && !isUpdatingFromSelectedPixel.current) {
+      // Only update URL if the edited coordinates are different from selectedPixel
+      // and represent a valid pixel
+      if ((editX !== selectedPixel.x || editY !== selectedPixel.y) &&
+          editX >= 0 && editX < 1024 && editY >= 0 && editY < 1024) {
+        updateUrl(editX, editY)
+      }
+    }
+  }, [editX, editY, isModalOpen, selectedPixel])
+
   // Draw canvas when pixels change
   useEffect(() => {
-    drawCanvas()
-  }, [pixels])
+    if (pixels.size > 0) {
+      drawCanvas()
+      // Hide loading overlay immediately after drawing (canvas will be visible)
+      if (isLoading) {
+        setIsLoading(false)
+      }
+    }
+  }, [pixels, isLoading])
 
-  // Animate processing arrows
+  // Animate processing arrows for payment processing (original speed)
   useEffect(() => {
     if (!isProcessing) {
       setProcessingArrow(0)
@@ -64,6 +199,22 @@ function App() {
 
     return () => clearInterval(interval)
   }, [isProcessing])
+
+  // Animate loading arrows for initial page load (2x speed)
+  useEffect(() => {
+    if (!isLoading) {
+      setLoadingArrow(0)
+      return
+    }
+
+    const arrows = ['→', '↓', '←', '↑']
+    // Each arrow shows for 125ms with 50ms overlap = 75ms interval between starts (2x speed)
+    const interval = setInterval(() => {
+      setLoadingArrow((prev) => (prev + 1) % arrows.length)
+    }, 75) // 125ms display - 50ms overlap = 75ms interval (doubled speed)
+
+    return () => clearInterval(interval)
+  }, [isLoading])
 
   const loadPixels = async () => {
     try {
@@ -92,6 +243,7 @@ function App() {
       }
 
       setPixels(pixelsMap)
+      // Don't set isLoading to false here - let the drawCanvas useEffect handle it
     } catch (error) {
       console.error('Error loading pixels from Supabase:', error)
       // Initialize with all white pixels on error
@@ -102,6 +254,7 @@ function App() {
         }
       }
       setPixels(pixelsMap)
+      // Don't set isLoading to false here - let the drawCanvas useEffect handle it
     }
   }
 
@@ -135,6 +288,7 @@ function App() {
     if (x >= 0 && x < 1024 && y >= 0 && y < 1024) {
       setSelectedPixel({ x, y })
       setIsModalOpen(true)
+      // URL will be updated by the selectedPixel useEffect
     }
   }
 
@@ -187,6 +341,7 @@ function App() {
       setSelectedPixel(randomPixel)
       setEditX(randomPixel.x)
       setEditY(randomPixel.y)
+      // URL will be updated by the selectedPixel useEffect
     }
   }
 
@@ -266,12 +421,21 @@ function App() {
   const closeModal = () => {
     setIsModalOpen(false)
     setSelectedPixel(null)
+    resetUrl()
   }
 
   const currentPixelColor = selectedPixel ? getPixelColor(editX, editY) : 'white'
 
   return (
     <div className="app">
+      <div className={`loading-overlay ${isLoading ? 'loading-overlay-visible' : 'loading-overlay-hidden'}`}>
+        <div className="loading-arrows">
+          {loadingArrow === 0 && '→'}
+          {loadingArrow === 1 && '↓'}
+          {loadingArrow === 2 && '←'}
+          {loadingArrow === 3 && '↑'}
+        </div>
+      </div>
       <div className="canvas-container">
         <canvas
           ref={canvasRef}
