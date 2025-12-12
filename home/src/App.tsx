@@ -5,6 +5,7 @@ function App() {
 
   // Site map links - update with your actual routes
   const siteMapLinks = [
+    { name: 'store', path: 'https://rotbae.printify.me/', icon: '/home/store.svg', external: true },
     { name: 'stream', path: '/stream', icon: '/home/stream.svg' },
     { name: 'drops', path: '/drops', icon: '/home/drops.svg' },
     { name: 'void', path: '/void', icon: '/home/void.svg' },
@@ -35,7 +36,7 @@ function App() {
             <ul className="sitemap-list">
               {siteMapLinks.map((link) => (
                 <li key={link.path}>
-                  <a href={link.path}>
+                  <a href={link.path} target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener noreferrer' : undefined}>
                     <img src={link.icon} alt="" className="sitemap-icon" />
                     {link.name}
                   </a>
@@ -53,7 +54,7 @@ function App() {
             check out the art.
           </p>
           <p>
-            buy something. like a bit of void. or not.
+            buy something, like a bit of void. or don't.
           </p>
           <p>
             love ya,
