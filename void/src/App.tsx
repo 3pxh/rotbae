@@ -65,40 +65,50 @@ function App() {
     if (sessionId && x && y) {
       // Payment was successful, reload pixels to get the updated state
       // Don't show loading overlay on reload
-      const reloadPixels = async () => {
-        try {
-          const { data, error } = await supabase
-            .from('black_pixels')
-            .select('x, y')
-          if (error) throw error
-          const pixelsMap = new Map<string, Pixel>()
-          for (let x = 0; x < 1024; x++) {
-            for (let y = 0; y < 1024; y++) {
-              pixelsMap.set(`${x},${y}`, { x, y, color: 'white' })
-            }
-          }
-          if (data) {
-            data.forEach((pixel) => {
-              const key = `${pixel.x},${pixel.y}`
-              pixelsMap.set(key, { x: pixel.x, y: pixel.y, color: 'black' })
-            })
-          }
-          setPixels(pixelsMap)
-        } catch (error) {
-          console.error('Error reloading pixels:', error)
-        }
-      }
-      reloadPixels()
-      // Clean up URL - remove session_id but keep x and y if they're valid coordinates
-      const url = new URL(window.location.href)
-      url.searchParams.delete('session_id')
       const xNum = parseInt(x, 10)
       const yNum = parseInt(y, 10)
+      
       if (xNum >= 0 && xNum < 1024 && yNum >= 0 && yNum < 1024) {
-        // Keep x and y params, just remove session_id
+        // Set selected pixel and open modal to show the purchased pixel
+        setSelectedPixel({ x: xNum, y: yNum })
+        setEditX(xNum)
+        setEditY(yNum)
+        setIsModalOpen(true)
+        
+        // Reload pixels to get the updated state
+        const reloadPixels = async () => {
+          try {
+            const { data, error } = await supabase
+              .from('black_pixels')
+              .select('x, y')
+            if (error) throw error
+            const pixelsMap = new Map<string, Pixel>()
+            for (let x = 0; x < 1024; x++) {
+              for (let y = 0; y < 1024; y++) {
+                pixelsMap.set(`${x},${y}`, { x, y, color: 'white' })
+              }
+            }
+            if (data) {
+              data.forEach((pixel) => {
+                const key = `${pixel.x},${pixel.y}`
+                pixelsMap.set(key, { x: pixel.x, y: pixel.y, color: 'black' })
+              })
+            }
+            setPixels(pixelsMap)
+          } catch (error) {
+            console.error('Error reloading pixels:', error)
+          }
+        }
+        reloadPixels()
+        
+        // Clean up URL - remove session_id but keep x and y
+        const url = new URL(window.location.href)
+        url.searchParams.delete('session_id')
         window.history.replaceState({}, document.title, url.toString())
       } else {
         // Invalid coordinates, remove all params
+        const url = new URL(window.location.href)
+        url.searchParams.delete('session_id')
         url.searchParams.delete('x')
         url.searchParams.delete('y')
         window.history.replaceState({}, document.title, url.toString())
