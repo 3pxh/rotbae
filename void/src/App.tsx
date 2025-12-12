@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import { supabase } from './lib/supabase'
-import { stripePromise } from './lib/stripe'
 
 interface Pixel {
   x: number
