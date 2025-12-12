@@ -15,6 +15,12 @@
 # SPA routing fallback for each subdomain
 # These handle client-side routes that don't exist as files
 [[redirects]]
+  from = "/home/*"
+  to = "/home/index.html"
+  status = 200
+  force = false
+
+[[redirects]]
   from = "/stream/*"
   to = "/stream/index.html"
   status = 200

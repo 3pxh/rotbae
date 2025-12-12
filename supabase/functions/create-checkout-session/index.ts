@@ -95,8 +95,8 @@ Deno.serve(async (req) => {
         },
       ],
       mode: 'payment',
-      success_url: `${baseUrl}/void/?session_id={CHECKOUT_SESSION_ID}&x=${x}&y=${y}`,
-      cancel_url: `${baseUrl}/void/?canceled=true`,
+      success_url: `${baseUrl}/?session_id={CHECKOUT_SESSION_ID}&x=${x}&y=${y}`,
+      cancel_url: `${baseUrl}/?canceled=true`,
       metadata: {
         x: x.toString(),
         y: y.toString(),
