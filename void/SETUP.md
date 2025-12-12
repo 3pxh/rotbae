@@ -74,14 +74,54 @@ Functions are located in `supabase/functions/`:
 
 ### Deployment
 
-1. Install Supabase CLI: `npm install -g supabase`
-2. Login: `supabase login`
-3. Link project: `supabase link --project-ref your-project-ref`
+1. Install Supabase CLI:
+   ```bash
+   npm install -g supabase
+   ```
+
+2. Login to Supabase:
+   ```bash
+   supabase login
+   ```
+
+3. Link your project:
+   ```bash
+   supabase link --project-ref your-project-ref
+   ```
+   
+   **How to find your project-ref:**
+   - Go to your Supabase Dashboard
+   - Click on your project
+   - Go to Settings → General
+   - Look for "Reference ID" - this is your project-ref
+   - Or check your project URL: `https://app.supabase.com/project/abcdefghijklmnop`
+     The part after `/project/` is your project-ref
+
 4. Deploy functions:
    ```bash
    supabase functions deploy create-checkout-session
-   supabase functions deploy stripe-webhook
+   npm run deploy:stripe_webhook
    ```
+   
+   **Note:** The webhook function is deployed with `--no-verify-jwt` to allow Stripe webhooks (which don't send Authorization headers).
 
-See `SUPABASE_EDGE_FUNCTIONS.md` for detailed setup instructions.
+### Function URLs
+
+After deployment, your functions will be available at:
+- `https://your-project-ref.supabase.co/functions/v1/create-checkout-session`
+- `https://your-project-ref.supabase.co/functions/v1/stripe-webhook`
+
+The frontend automatically calls these via `supabase.functions.invoke()`.
+
+### Stripe Keys
+
+**Where to find Stripe values:**
+
+- **STRIPE_SECRET_KEY**: 
+  - Stripe Dashboard → Developers → API keys
+  - Copy the "Secret key" (starts with `sk_...`)
+
+- **STRIPE_WEBHOOK_SECRET**:
+  - Stripe Dashboard → Developers → Webhooks
+  - After creating the webhook endpoint, copy the "Signing secret" (starts with `whsec_...`)
 
