@@ -7,7 +7,7 @@ export default async (request: Request) => {
   const pathname = url.pathname;
 
   // List of known subdomain folders (update when adding new projects)
-  const knownSubdomains = ['stream', 'admin', 'drops']; // Add new projects here
+  const knownSubdomains = ['stream', 'admin', 'drops', 'void']; // Add new projects here
   
   // Map of host patterns to subdomain folders
   const hostMap: Record<string, string> = {
@@ -15,7 +15,13 @@ export default async (request: Request) => {
     'www.rotbae.com': 'stream',
     'stream.rotbae.com': 'stream',
     'drops.rotbae.com': 'drops',
+    'void.rotbae.com': 'void',
   };
+
+  // Pass through API requests to Netlify functions
+  if (pathname.startsWith('/.netlify/functions/')) {
+    return;
+  }
 
   // Check if pathname already starts with a known subdomain folder
   // This handles direct access like rotbae.com/admin/ or rotbae.com/stream/

@@ -26,6 +26,12 @@
   status = 200
   force = false
 
+[[redirects]]
+  from = "/void/*"
+  to = "/void/index.html"
+  status = 200
+  force = false
+
 # Headers for security and performance
 [[headers]]
   for = "/*"

@@ -6,5 +6,10 @@
     "build:all": "node build-all.js",
     "build:stream": "cd stream && npm install && npm run build",
     "dev:stream": "cd stream && npm run dev"
+  },
+  "dependencies": {
+    "@netlify/functions": "^5.1.1",
+    "@supabase/supabase-js": "^2.87.1",
+    "stripe": "^20.0.0"
   }
 }
