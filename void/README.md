@@ -1,73 +1,65 @@
-# React + TypeScript + Vite
+# Void
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A collaborative pixel canvas where users can purchase pixels to turn them black. Built with React, TypeScript, Vite, Supabase, and Stripe.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 1024x1024 pixel canvas
+- Click any pixel to inspect and purchase it
+- Stripe integration for $1 pixel purchases
+- Real-time pixel updates via Supabase
+- URL routing with query parameters (`?x=123&y=234`)
+- Loading animations and payment processing indicators
 
-## React Compiler
+## Quick Start
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. **Install dependencies:**
+   ```bash
+   cd void
+   npm install
+   ```
 
-## Expanding the ESLint configuration
+2. **Set up environment variables:**
+   - Copy `.env.example` to `.env` (if it exists) or create `.env`
+   - See `SETUP.md` for detailed instructions
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+3. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+4. **Build for production:**
+   ```bash
+   npm run build
+   ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Documentation
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **[SETUP.md](./SETUP.md)** - Complete setup guide (environment variables, Supabase, Stripe, Edge Functions)
+- **[TESTING.md](./TESTING.md)** - Testing guide with Stripe test cards
+- **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** - Common issues and solutions
+
+## Project Structure
+
+```
+void/
+├── src/
+│   ├── App.tsx          # Main application component
+│   ├── App.css          # Styles
+│   └── lib/
+│       ├── supabase.ts  # Supabase client
+│       └── stripe.ts    # Stripe client
+├── supabase-schema.sql  # Database schema
+└── SETUP.md             # Setup instructions
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Tech Stack
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Frontend:** React, TypeScript, Vite
+- **Backend:** Supabase (Database + Edge Functions)
+- **Payments:** Stripe Checkout
+- **Deployment:** Netlify (via monorepo)
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## License
+
+Private project - All rights reserved

@@ -5,7 +5,8 @@
   "scripts": {
     "build:all": "node build-all.js",
     "build:stream": "cd stream && npm install && npm run build",
-    "dev:stream": "cd stream && npm run dev"
+    "dev:stream": "cd stream && npm run dev",
+    "deploy:stripe_webhook": "supabase functions deploy stripe-webhook --no-verify-jwt"
   },
   "dependencies": {
     "@netlify/functions": "^5.1.1",
