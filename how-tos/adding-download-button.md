@@ -49,7 +49,10 @@ export default defineConfig({
   // ... existing config ...
   resolve: {
     alias: {
-      '@utilities': path.resolve(__dirname, '../utilities')
+      '@utilities': path.resolve(__dirname, '../utilities'),
+      // Ensure React resolves from project's node_modules, not utilities
+      'react': path.resolve(__dirname, './node_modules/react'),
+      'react/jsx-runtime': path.resolve(__dirname, './node_modules/react/jsx-runtime')
     }
   }
 })
@@ -58,6 +61,10 @@ export default defineConfig({
 **Key changes:**
 - Import `path` from `'path'`
 - Add `resolve.alias` configuration pointing to `../utilities`
+- **Important**: Add React resolution aliases to ensure Vite uses your project's React, not utilities' React
+
+**Why React aliases are needed:**
+The utilities directory has React as a devDependency for TypeScript type checking, but Vite needs to bundle React from your project's `node_modules` to avoid version conflicts and ensure proper bundling. Without these aliases, Vite may try to resolve React from `utilities/node_modules`, causing build failures.
 
 ### Step 3: Install Utilities Dependencies
 
@@ -253,11 +260,17 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@utilities': path.resolve(__dirname, '../utilities')
+      '@utilities': path.resolve(__dirname, '../utilities'),
+      // Ensure React resolves from project's node_modules, not utilities
+      'react': path.resolve(__dirname, './node_modules/react'),
+      'react/jsx-runtime': path.resolve(__dirname, './node_modules/react/jsx-runtime')
     }
   }
 })
 ```
+
+**Why React aliases are needed:**
+The utilities directory has React as a devDependency for TypeScript type checking, but Vite needs to bundle React from your project's `node_modules` to avoid version conflicts and ensure proper bundling. Without these aliases, Vite may try to resolve React from `utilities/node_modules`, causing build failures.
 
 ### Step 5: Create Your Canvas Component
 
@@ -293,7 +306,13 @@ The `utilities` directory is set up as a proper npm package with its own `packag
 
 **Dependencies:**
 - `jszip` - For creating ZIP archives when multiple files are downloaded
+- `react` - Dev dependency for TypeScript type checking (not bundled)
 - `@types/react` - For TypeScript type definitions (dev dependency)
+
+**Important: React Resolution in Vite**
+- Utilities has React as a devDependency for TypeScript, but Vite must bundle React from the consuming project
+- Each project using utilities must add React resolution aliases to their `vite.config.ts` to prevent Vite from trying to bundle React from `utilities/node_modules`
+- See Step 2/Step 4 for the required Vite configuration
 
 **Trade-offs:**
 - **Pros**: Proper dependency management, ZIP file support, TypeScript resolution works correctly
@@ -320,6 +339,27 @@ export default withDownloadButton(App as any)
 2. Verify `vite.config.ts` has the correct `alias` configuration
 3. Ensure `../utilities` exists relative to your project
 4. Restart your TypeScript server and dev server
+
+### Vite Build Error: Cannot resolve "react/jsx-runtime"
+
+If you see an error like:
+```
+[vite]: Rollup failed to resolve import "react/jsx-runtime" from "/path/to/utilities/withDownloadButton.tsx"
+```
+
+This means Vite is trying to resolve React from the utilities directory instead of your project. **Solution**: Add React resolution aliases to your `vite.config.ts`:
+
+```typescript
+resolve: {
+  alias: {
+    '@utilities': path.resolve(__dirname, '../utilities'),
+    'react': path.resolve(__dirname, './node_modules/react'),
+    'react/jsx-runtime': path.resolve(__dirname, './node_modules/react/jsx-runtime')
+  }
+}
+```
+
+This ensures Vite bundles React from your project's `node_modules`, not from `utilities/node_modules`.
 
 ### Canvas Not Rendering
 
