@@ -1,0 +1,5 @@
+{
+  "name": "Symmetric Chaos Explorer",
+  "description": "A modern, interactive visualization of symmetric icons and chaotic attractors based on legacy QBASIC algorithms.",
+  "requestFramePermissions": []
+}

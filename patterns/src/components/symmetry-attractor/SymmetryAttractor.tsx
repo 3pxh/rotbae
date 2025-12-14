@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { SimulationCanvas } from './SimulationCanvas';
 import { ControlPanel } from './ControlPanel';
 import { DEFAULT_PARAMS } from './types';
 import type { SimulationParams, SavedPreset } from './types';
+import presetsData from './symmetry-attractor-presets.json';
 import './SymmetryAttractor.css';
 
 export const SymmetryAttractor: React.FC = () => {
@@ -102,6 +103,37 @@ export const SymmetryAttractor: React.FC = () => {
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
   }, [savedPresets]);
+
+  // Load presets on mount
+  useEffect(() => {
+    try {
+      if (Array.isArray(presetsData)) {
+        const validPresets = presetsData.filter((p: any): p is SavedPreset => 
+          p && 
+          typeof p === 'object' && 
+          typeof p.id === 'string' &&
+          typeof p.name === 'string' &&
+          typeof p.timestamp === 'number' &&
+          p.params &&
+          typeof p.params.lambda === 'number' &&
+          typeof p.params.alpha === 'number' &&
+          typeof p.params.beta === 'number' &&
+          typeof p.params.gamma === 'number' &&
+          typeof p.params.omega === 'number' &&
+          typeof p.params.n === 'number' &&
+          typeof p.params.scale === 'number'
+        );
+        if (validPresets.length > 0) {
+          setSavedPresets(validPresets);
+          // Optionally load the first preset
+          // setParams(validPresets[0].params);
+          // setResetTrigger(prev => prev + 1);
+        }
+      }
+    } catch (err) {
+      console.error("Failed to load presets", err);
+    }
+  }, []); // Run only on mount
 
   return (
     <div className="symmetry-attractor-container">

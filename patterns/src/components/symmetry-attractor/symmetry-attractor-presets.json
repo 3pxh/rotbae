@@ -1,0 +1,87 @@
+[
+  {
+    "id": "halloween",
+    "name": "Halloween",
+    "timestamp": 1716300000000,
+    "params": { "lambda": -2.7, "alpha": 5.0, "beta": 1.5, "gamma": 1.0, "omega": 0.0, "n": 6, "scale": 1.0 }
+  },
+  {
+    "id": "mayan-bracelet",
+    "name": "Mayan Bracelet",
+    "timestamp": 1716300000001,
+    "params": { "lambda": -2.08, "alpha": 1.0, "beta": -0.1, "gamma": 0.167, "omega": 0.0, "n": 7, "scale": 1.0 }
+  },
+  {
+    "id": "clam-triple",
+    "name": "Clam Triple",
+    "timestamp": 1716300000002,
+    "params": { "lambda": 1.56, "alpha": -1.0, "beta": 0.1, "gamma": -0.82, "omega": 0.0, "n": 3, "scale": 1.0 }
+  },
+  {
+    "id": "emperors-cloak",
+    "name": "Emperor's Cloak",
+    "timestamp": 1716300000003,
+    "params": { "lambda": -1.806, "alpha": 1.806, "beta": 0.0, "gamma": 1.0, "omega": 0.0, "n": 4, "scale": 1.0 }
+  },
+  {
+    "id": "swirling-streamers",
+    "name": "Swirling Streamers",
+    "timestamp": 1716300000004,
+    "params": { "lambda": -1.86, "alpha": 2.0, "beta": 0.0, "gamma": 1.0, "omega": 0.1, "n": 4, "scale": 1.0 }
+  },
+  {
+    "id": "the-sanddollar",
+    "name": "The Sanddollar",
+    "timestamp": 1716300000005,
+    "params": { "lambda": -2.34, "alpha": 2.0, "beta": 0.2, "gamma": 0.1, "omega": 0.0, "n": 5, "scale": 1.0 }
+  },
+  {
+    "id": "pentagon-attractor",
+    "name": "Pentagon Attractor",
+    "timestamp": 1716300000006,
+    "params": { "lambda": 2.6, "alpha": -2.0, "beta": 0.0, "gamma": -0.5, "omega": 0.0, "n": 5, "scale": 1.0 }
+  },
+  {
+    "id": "chaotic-flower",
+    "name": "Chaotic Flower",
+    "timestamp": 1716300000007,
+    "params": { "lambda": -2.5, "alpha": 5.0, "beta": -1.9, "gamma": 1.0, "omega": 0.188, "n": 5, "scale": 1.0 }
+  },
+  {
+    "id": "santa-chiara-icon",
+    "name": "Santa Chiara Icon",
+    "timestamp": 1716300000008,
+    "params": { "lambda": 2.409, "alpha": -2.5, "beta": 0.0, "gamma": 0.9, "omega": 0.0, "n": 24, "scale": 1.0 }
+  },
+  {
+    "id": "french-glass",
+    "name": "French Glass",
+    "timestamp": 1716300000009,
+    "params": { "lambda": 2.409, "alpha": -2.5, "beta": -0.2, "gamma": 0.81, "omega": 0.0, "n": 24, "scale": 1.0 }
+  },
+  {
+    "id": "the-pentacle",
+    "name": "The Pentacle",
+    "timestamp": 1716300000010,
+    "params": { "lambda": -2.05, "alpha": 3.0, "beta": -16.79, "gamma": 1.0, "omega": 0.0, "n": 9, "scale": 1.0 }
+  },
+  {
+    "id": "golden-flintstone",
+    "name": "Golden Flintstone",
+    "timestamp": 1716300000011,
+    "params": { "lambda": -2.32, "alpha": 2.32, "beta": 0.0, "gamma": 0.75, "omega": 0.0, "n": 5, "scale": 1.0 }
+  },
+  {
+    "id": "trinity-in-red",
+    "name": "Trinity in Red",
+    "timestamp": 1716300000012,
+    "params": { "lambda": 2.5, "alpha": -2.5, "beta": 0.0, "gamma": 0.9, "omega": 0.0, "n": 3, "scale": 1.0 }
+  },
+  {
+    "id": "fish-and-eye",
+    "name": "Fish and Eye",
+    "timestamp": 1716300000013,
+    "params": { "lambda": -2.18, "alpha": 10.0, "beta": -12.0, "gamma": 1.0, "omega": 0.0, "n": 2, "scale": 1.0 }
+  }
+]
+

@@ -1,138 +1,215 @@
 import React from 'react';
-import type { SquareQuiltParams } from './types';
-import { Input } from './Input';
+import type { SimulationParams, Preset } from './types';
+import { PRESETS } from './types';
 import './ControlPanel.css';
 
-type Preset = SquareQuiltParams & { name?: string; figure?: string };
-
 interface ControlPanelProps {
-  params: SquareQuiltParams;
-  setParams: React.Dispatch<React.SetStateAction<SquareQuiltParams>>;
+  params: SimulationParams;
+  setParams: React.Dispatch<React.SetStateAction<SimulationParams>>;
   onClear: () => void;
   onReset: () => void;
-  onSaveParams: () => void;
-  onLoadParams: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onLoadPreset: (preset: Preset) => void;
-  loadedPresets: Preset[];
-  iterates: number;
+  isRunning: boolean;
+  setIsRunning: (val: boolean) => void;
 }
 
-export const ControlPanel: React.FC<ControlPanelProps> = ({ params, setParams, onClear, onReset, onSaveParams, onLoadParams, onLoadPreset, loadedPresets, iterates }) => {
-  const updateParam = (key: keyof SquareQuiltParams, value: number) => {
-    setParams((prev) => ({ ...prev, [key]: value }));
-  };
+const Slider: React.FC<{
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  onChange: (val: number) => void;
+}> = ({ label, value, min, max, step, onChange }) => (
+  <div className="square-quilt-slider">
+    <div className="square-quilt-slider-header">
+      <label className="square-quilt-slider-label">{label}</label>
+      <span className="square-quilt-slider-value">{value.toFixed(4)}</span>
+    </div>
+    <input
+      type="range"
+      min={min}
+      max={max}
+      step={step}
+      value={value}
+      onChange={(e) => onChange(parseFloat(e.target.value))}
+      className="square-quilt-slider-input"
+    />
+  </div>
+);
 
-  const toggleColoring = () => {
-    updateParam('toggle', params.toggle === 0 ? 1 : 0);
+export const ControlPanel: React.FC<ControlPanelProps> = ({
+  params,
+  setParams,
+  onClear,
+  onReset,
+  isRunning,
+  setIsRunning,
+}) => {
+  const handleChange = (key: keyof SimulationParams, value: number | string) => {
+    setParams((prev) => ({ ...prev, [key]: value }));
   };
 
   return (
     <div className="square-quilt-control-panel">
       <div className="square-quilt-control-header">
-        <h1 className="square-quilt-control-title">Square Quilt</h1>
-        <p className="square-quilt-control-subtitle">BASIC fractal generator</p>
+        <h2 className="square-quilt-control-title">Parameters</h2>
+        <p className="square-quilt-control-subtitle">Adjust the chaos variables</p>
       </div>
 
-      <div className="square-quilt-control-content">
-        
-        {/* Status Display */}
-        <div className="square-quilt-status">
-          <div className="square-quilt-status-row">
-            <span>Iterates:</span>
-            <span className="square-quilt-status-value">{iterates.toLocaleString()}</span>
-          </div>
-          <div className="square-quilt-status-row">
-            <span>Coloring:</span>
-            <span className="square-quilt-status-value">{params.toggle === 0 ? 'Off' : 'On'}</span>
-          </div>
-          <div className="square-quilt-status-row">
-            <span>Periods:</span>
-            <span className="square-quilt-status-value">{params.nperiod}</span>
-          </div>
+      <div className="square-quilt-presets-section">
+        <h3 className="square-quilt-presets-title">Presets</h3>
+        <div className="square-quilt-presets-grid">
+          {PRESETS.map((preset) => (
+            <button
+              key={preset.name}
+              onClick={() => {
+                onClear();
+                setParams((prev) => ({ ...prev, ...preset.params }));
+              }}
+              className="square-quilt-preset-button"
+              title={preset.name}
+            >
+              {preset.name}
+            </button>
+          ))}
         </div>
+      </div>
 
-        {/* Parameters */}
-        <div className="square-quilt-control-section">
-          <h2 className="square-quilt-section-title">Parameters</h2>
-          <Input label="Lambda" value={params.lambda} onChange={(v) => updateParam('lambda', v)} />
-          <Input label="Alpha" value={params.alpha} onChange={(v) => updateParam('alpha', v)} />
-          <Input label="Beta" value={params.beta} onChange={(v) => updateParam('beta', v)} />
-          <Input label="Gamma" value={params.gamma} onChange={(v) => updateParam('gamma', v)} />
-          <Input label="Omega" value={params.omega} onChange={(v) => updateParam('omega', v)} />
-          <Input label="M" value={params.m} onChange={(v) => updateParam('m', v)} />
-          <Input label="Shift" value={params.shift} onChange={(v) => updateParam('shift', v)} />
-        </div>
-
-        {/* Loaded Presets */}
-        {loadedPresets.length > 0 && (
-          <div className="square-quilt-control-section">
-            <h2 className="square-quilt-section-title">Loaded Presets</h2>
-            <div className="square-quilt-presets-list">
-              {loadedPresets.map((preset, index) => (
-                <button
-                  key={index}
-                  onClick={() => onLoadPreset(preset)}
-                  className="square-quilt-preset-item"
-                >
-                  <div className="square-quilt-preset-name">
-                    {preset.name || `Preset ${index + 1}`}
-                  </div>
-                  {preset.figure && (
-                    <div className="square-quilt-preset-figure">Fig. {preset.figure}</div>
-                  )}
-                </button>
-              ))}
+      <div className="square-quilt-controls-scroll">
+        <div className="square-quilt-controls-content">
+          <Slider
+            label="Lambda (λ)"
+            value={params.lambda}
+            min={-3}
+            max={3}
+            step={0.01}
+            onChange={(v) => handleChange('lambda', v)}
+          />
+          <Slider
+            label="Alpha (α)"
+            value={params.alpha}
+            min={-3}
+            max={3}
+            step={0.01}
+            onChange={(v) => handleChange('alpha', v)}
+          />
+          <Slider
+            label="Beta (β)"
+            value={params.beta}
+            min={-1}
+            max={1}
+            step={0.01}
+            onChange={(v) => handleChange('beta', v)}
+          />
+          <Slider
+            label="Gamma (γ)"
+            value={params.gamma}
+            min={-1}
+            max={1}
+            step={0.01}
+            onChange={(v) => handleChange('gamma', v)}
+          />
+          <Slider
+            label="Omega (ω)"
+            value={params.omega}
+            min={-1}
+            max={1}
+            step={0.01}
+            onChange={(v) => handleChange('omega', v)}
+          />
+          <Slider
+            label="M Constant"
+            value={params.ma}
+            min={-1}
+            max={1}
+            step={0.01}
+            onChange={(v) => handleChange('ma', v)}
+          />
+          
+          <div className="square-quilt-settings-section">
+            <h3 className="square-quilt-settings-title">Settings</h3>
+            <Slider
+              label="Periods (Tiling)"
+              value={params.nperiod}
+              min={1}
+              max={10}
+              step={1}
+              onChange={(v) => {
+                onClear();
+                handleChange('nperiod', v);
+              }}
+            />
+            <Slider
+              label="Simulation Speed"
+              value={params.speed}
+              min={100}
+              max={10000}
+              step={100}
+              onChange={(v) => handleChange('speed', v)}
+            />
+            <Slider
+              label="Point Size"
+              value={params.pointSize}
+              min={0.5}
+              max={5}
+              step={0.1}
+              onChange={(v) => handleChange('pointSize', v)}
+            />
+            <Slider
+              label="Opacity"
+              value={params.opacity}
+              min={0.1}
+              max={1}
+              step={0.01}
+              onChange={(v) => handleChange('opacity', v)}
+            />
+            <div className="square-quilt-shift-control">
+              <label className="square-quilt-shift-label">Shift Offset</label>
+              <button
+                onClick={() => {
+                  onClear();
+                  handleChange('shift', params.shift === 0 ? 0.5 : 0);
+                }}
+                className={`square-quilt-shift-button ${params.shift > 0 ? 'square-quilt-shift-button-active' : ''}`}
+              >
+                {params.shift > 0 ? '+0.5' : '0.0'}
+              </button>
+            </div>
+            <div className="square-quilt-color-control">
+              <label className="square-quilt-color-label">Color</label>
+              <input
+                type="color"
+                value={params.color}
+                onChange={(e) => handleChange('color', e.target.value)}
+                className="square-quilt-color-input"
+              />
             </div>
           </div>
-        )}
-
-        {/* View Controls */}
-        <div className="square-quilt-control-section">
-          <h2 className="square-quilt-section-title">View</h2>
-          <Input label="Periods" value={params.nperiod} onChange={(v) => updateParam('nperiod', Math.max(1, Math.floor(v)))} step={1} min={1} />
-          <div className="square-quilt-toggle">
-            <span className="square-quilt-toggle-label">Coloring</span>
-            <button
-              onClick={toggleColoring}
-              className={`square-quilt-toggle-button ${params.toggle === 1 ? 'square-quilt-toggle-button-active' : ''}`}
-            >
-              {params.toggle === 0 ? 'Off' : 'On'}
-            </button>
-          </div>
         </div>
+      </div>
 
-        {/* Actions */}
-        <div className="square-quilt-actions">
+      <div className="square-quilt-actions">
+        <button
+          onClick={() => setIsRunning(!isRunning)}
+          className={`square-quilt-action-button square-quilt-action-button-toggle ${isRunning ? 'square-quilt-action-button-pause' : 'square-quilt-action-button-start'}`}
+        >
+          {isRunning ? 'Pause' : 'Start Simulation'}
+        </button>
+        <div className="square-quilt-action-buttons-row">
           <button
             onClick={onClear}
-            className="square-quilt-button square-quilt-button-clear"
+            className="square-quilt-action-button square-quilt-action-button-secondary"
           >
-            Clear Screen
+            Clear Canvas
           </button>
           <button
             onClick={onReset}
-            className="square-quilt-button square-quilt-button-reset"
+            className="square-quilt-action-button square-quilt-action-button-secondary"
           >
-            Reset Defaults
+            Reset Params
           </button>
-          <button
-            onClick={onSaveParams}
-            className="square-quilt-button square-quilt-button-save"
-          >
-            Save Parameters
-          </button>
-          <label className="square-quilt-button square-quilt-button-load">
-            Load Parameters
-            <input 
-              type="file" 
-              accept=".json" 
-              onChange={onLoadParams}
-              className="square-quilt-file-input" 
-            />
-          </label>
         </div>
       </div>
     </div>
   );
 };
-

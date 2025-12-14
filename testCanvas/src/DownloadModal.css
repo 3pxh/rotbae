@@ -1,0 +1,300 @@
+.download-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+  padding-top: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.download-modal-content {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  padding: 1rem 2rem 2rem 2rem;
+  max-width: 90vw;
+  max-height: 95vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  animation: slideUp 0.2s ease-out;
+  margin-top: 0;
+  overflow-y: auto;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.download-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.download-modal-close:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+.download-modal-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.87);
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.download-modal-preview {
+  max-width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background-color: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.download-modal-preview::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.download-modal-preview img {
+  max-width: 100%;
+  max-height: 60vh;
+  display: block;
+}
+
+.download-modal-size-selector {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0.75rem 0;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+  flex-shrink: 0;
+}
+
+.size-option {
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid #333;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.size-option:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.size-option-active {
+  background-color: rgba(14, 165, 233, 0.2);
+  border-color: #0ea5e9;
+  color: #0ea5e9;
+}
+
+.size-option-active:hover {
+  background-color: rgba(14, 165, 233, 0.3);
+}
+
+.custom-size-inputs {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  padding: 0.75rem 0;
+  flex-shrink: 0;
+}
+
+.custom-size-inputs label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+}
+
+.custom-size-input {
+  padding: 0.5rem;
+  background-color: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.87);
+  font-size: 0.875rem;
+  width: 100px;
+}
+
+.custom-size-input:focus {
+  outline: none;
+  border-color: #0ea5e9;
+}
+
+.renderer-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+  padding: 0.5rem 0;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+}
+
+.renderer-label {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.renderer-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.renderer-checkbox:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.renderer-checkbox input[type="checkbox"] {
+  cursor: pointer;
+  width: 1rem;
+  height: 1rem;
+  accent-color: #0ea5e9;
+}
+
+.download-modal-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.download-name-input {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+}
+
+.name-input {
+  padding: 0.5rem;
+  background-color: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.87);
+  font-size: 0.875rem;
+  min-width: 150px;
+}
+
+.name-input:focus {
+  outline: none;
+  border-color: #0ea5e9;
+}
+
+.download-modal-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #0ea5e9;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.download-modal-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.download-modal-button-loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.download-icon {
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.download-modal-button:hover:not(:disabled) {
+  background-color: #0284c7;
+}
+
+.download-modal-button-secondary {
+  padding: 0.75rem 1.5rem;
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid #333;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.download-modal-button-secondary:hover {
+  background-color: #333;
+  color: rgba(255, 255, 255, 1);
+}
+

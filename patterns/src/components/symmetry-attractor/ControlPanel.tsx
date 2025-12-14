@@ -139,7 +139,12 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         
         {/* Main Controls */}
         <div className="control-section">
-            <h3 className="control-section-title">Actions</h3>
+            <button 
+                onClick={onSaveImage}
+                className="control-button-full"
+            >
+                Save Image
+            </button>
             
             <div className="control-buttons-row">
                 <button 
@@ -165,13 +170,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                     Clear
                 </button>
             </div>
-
-            <button 
-                onClick={onSaveImage}
-                className="control-button-full"
-            >
-                Save Image
-            </button>
         </div>
 
         {/* Display Settings (Colors) - Label Removed */}
