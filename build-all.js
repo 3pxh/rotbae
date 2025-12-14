@@ -9,6 +9,7 @@ const subdomains = fs.readdirSync('.')
            !file.startsWith('.') &&
            file !== 'node_modules' &&
            file !== 'dist' &&
+           file !== 'utilities' && // Exclude utilities - it's a shared library, not a buildable project
            fs.existsSync(path.join(filePath, 'package.json'));
   });
 
