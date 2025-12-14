@@ -1,0 +1,501 @@
+.control-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 2rem;
+}
+
+.control-section {
+  background-color: rgba(15, 23, 42, 0.5); /* slate-900/50 */
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #334155; /* slate-700 */
+}
+
+.control-section-title {
+  font-size: 0.75rem;
+  color: #64748b; /* slate-500 */
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.control-buttons-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.control-button {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid;
+  transition: background-color 0.2s, color 0.2s;
+  cursor: pointer;
+}
+
+.control-button-pause {
+  background-color: rgba(120, 53, 15, 0.5); /* amber-900/50 */
+  color: #f59e0b; /* amber-500 */
+  border-color: #78350f; /* amber-900 */
+}
+
+.control-button-pause:hover {
+  background-color: #78350f; /* amber-900 */
+}
+
+.control-button-resume {
+  background-color: rgba(2, 44, 34, 0.5); /* emerald-900/50 */
+  color: #10b981; /* emerald-500 */
+  border-color: #022c22; /* emerald-900 */
+}
+
+.control-button-resume:hover {
+  background-color: #022c22; /* emerald-900 */
+}
+
+.control-button-restart {
+  background-color: rgba(30, 58, 138, 0.3); /* blue-900/30 */
+  color: #60a5fa; /* blue-400 */
+  border-color: rgba(30, 58, 138, 0.5); /* blue-900/50 */
+}
+
+.control-button-restart:hover {
+  background-color: rgba(30, 58, 138, 0.5); /* blue-900/50 */
+}
+
+.control-button-clear {
+  background-color: #1e293b; /* slate-800 */
+  color: #94a3b8; /* slate-400 */
+  border-color: #475569; /* slate-700 */
+}
+
+.control-button-clear:hover {
+  background-color: #475569; /* slate-700 */
+  color: #ffffff;
+}
+
+.control-button-full {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: #475569; /* slate-700 */
+  color: #cbd5e1; /* slate-300 */
+  border: 1px solid #475569; /* slate-600 */
+  transition: background-color 0.2s, color 0.2s;
+  cursor: pointer;
+}
+
+.control-button-full:hover {
+  background-color: #475569; /* slate-600 */
+  color: #ffffff;
+}
+
+.color-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.color-setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.color-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #cbd5e1; /* slate-300 */
+  text-transform: uppercase;
+}
+
+.color-input {
+  height: 1.5rem;
+  width: 3rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 0.25rem;
+}
+
+.render-mode-toggle {
+  display: flex;
+  text-align: center;
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  border: 1px solid #334155; /* slate-700 */
+}
+
+.render-mode-button {
+  flex: 1;
+  padding: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s, color 0.2s;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #64748b; /* slate-500 */
+}
+
+.render-mode-button:hover {
+  color: #cbd5e1; /* slate-300 */
+}
+
+.render-mode-button-active {
+  background-color: #475569; /* slate-700 */
+  color: #34d399; /* emerald-400 */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.speed-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.speed-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.speed-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b; /* slate-500 */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.speed-value {
+  font-size: 0.75rem;
+  color: #34d399; /* emerald-400 */
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+.speed-range {
+  width: 100%;
+  height: 0.5rem;
+  background-color: #475569; /* slate-700 */
+  border-radius: 0.5rem;
+  appearance: none;
+  cursor: pointer;
+}
+
+.speed-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: #10b981; /* emerald-500 */
+  cursor: pointer;
+}
+
+.speed-range::-moz-range-thumb {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: #10b981; /* emerald-500 */
+  cursor: pointer;
+  border: none;
+}
+
+.speed-range:hover::-webkit-slider-thumb {
+  background-color: #34d399; /* emerald-400 */
+}
+
+.speed-range:hover::-moz-range-thumb {
+  background-color: #34d399; /* emerald-400 */
+}
+
+.speed-range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #475569; /* slate-600 */
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  margin-top: 0.25rem;
+}
+
+.parameters-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.parameters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.parameters-title {
+  font-size: 0.75rem;
+  color: #64748b; /* slate-500 */
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.reset-button {
+  font-size: 10px;
+  color: #64748b; /* slate-500 */
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: #475569; /* slate-600 */
+  text-underline-offset: 2px;
+}
+
+.reset-button:hover {
+  color: #ffffff;
+}
+
+.slider-input {
+  margin-bottom: 1rem;
+}
+
+.slider-label-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.slider-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #cbd5e1; /* slate-300 */
+  text-transform: uppercase;
+}
+
+.slider-value {
+  font-size: 0.75rem;
+  color: #34d399; /* emerald-400 */
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+.slider-input-range {
+  width: 100%;
+  height: 0.5rem;
+  background-color: #475569; /* slate-700 */
+  border-radius: 0.5rem;
+  appearance: none;
+  cursor: pointer;
+}
+
+.slider-input-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: #10b981; /* emerald-500 */
+  cursor: pointer;
+}
+
+.slider-input-range::-moz-range-thumb {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: #10b981; /* emerald-500 */
+  cursor: pointer;
+  border: none;
+}
+
+.slider-input-range:hover::-webkit-slider-thumb {
+  background-color: #34d399; /* emerald-400 */
+}
+
+.slider-input-range:hover::-moz-range-thumb {
+  background-color: #34d399; /* emerald-400 */
+}
+
+.number-inputs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.number-input {
+  margin-bottom: 1rem;
+}
+
+.number-input-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #cbd5e1; /* slate-300 */
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.number-input-field {
+  width: 100%;
+  background-color: #0f172a; /* slate-900 */
+  border: 1px solid #475569; /* slate-700 */
+  color: #34d399; /* emerald-400 */
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 0.875rem;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.number-input-field:focus {
+  outline: none;
+  border-color: #10b981; /* emerald-500 */
+}
+
+.presets-section {
+  border-top: 1px solid #475569; /* slate-700 */
+  padding-top: 1rem;
+}
+
+.presets-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.preset-button {
+  flex: 1;
+  padding: 0.25rem 0.25rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid;
+  transition: background-color 0.2s, color 0.2s;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.preset-button-save {
+  background-color: rgba(2, 44, 34, 0.3); /* emerald-900/30 */
+  color: #34d399; /* emerald-400 */
+  border-color: rgba(2, 44, 34, 0.5); /* emerald-900/50 */
+}
+
+.preset-button-save:hover {
+  background-color: rgba(2, 44, 34, 0.5); /* emerald-900/50 */
+}
+
+.preset-button-load {
+  background-color: #1e293b; /* slate-800 */
+  color: #94a3b8; /* slate-400 */
+  border-color: #475569; /* slate-700 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.preset-button-load:hover {
+  background-color: #475569; /* slate-700 */
+  color: #ffffff;
+}
+
+.preset-button-download {
+  background-color: #1e293b; /* slate-800 */
+  color: #94a3b8; /* slate-400 */
+  border-color: #475569; /* slate-700 */
+}
+
+.preset-button-download:hover {
+  background-color: #475569; /* slate-700 */
+  color: #ffffff;
+}
+
+.preset-button-download:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.preset-file-input {
+  display: none;
+}
+
+.presets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 10rem;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.preset-item {
+  background-color: #0f172a; /* slate-900 */
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #1e293b; /* slate-800 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.preset-item-button {
+  text-align: left;
+  flex: 1;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.preset-item-name {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #cbd5e1; /* slate-300 */
+  transition: color 0.2s;
+}
+
+.preset-item:hover .preset-item-name {
+  color: #34d399; /* emerald-400 */
+}
+
+.preset-item-params {
+  font-size: 10px;
+  color: #475569; /* slate-600 */
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+.preset-remove-button {
+  margin-left: 0.5rem;
+  padding: 0.25rem;
+  color: #475569; /* slate-600 */
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.preset-remove-button:hover {
+  color: #f87171; /* red-400 */
+}
+
+.preset-empty {
+  font-size: 10px;
+  color: #475569; /* slate-600 */
+  font-style: italic;
+  text-align: center;
+  padding: 0.5rem 0;
+}
+

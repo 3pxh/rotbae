@@ -1,0 +1,15 @@
+.fractal-canvas-container {
+  flex: 1;
+  position: relative;
+  background-color: #000000;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+.fractal-canvas {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+

@@ -1,0 +1,17 @@
+.square-quilt-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: #0f172a; /* slate-900 */
+  color: #f1f5f9; /* slate-100 */
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+@media (min-width: 768px) {
+  .square-quilt-container {
+    flex-direction: row;
+  }
+}
+

@@ -38,6 +38,12 @@
   status = 200
   force = false
 
+[[redirects]]
+  from = "/patterns/*"
+  to = "/patterns/index.html"
+  status = 200
+  force = false
+
 # Headers for security and performance
 [[headers]]
   for = "/*"
