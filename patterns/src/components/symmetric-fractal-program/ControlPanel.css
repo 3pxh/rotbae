@@ -1,0 +1,342 @@
+.fractal-control-panel {
+  width: 100%;
+  background-color: #0f172a; /* slate-900 */
+  border-right: 1px solid #1e293b; /* slate-800 */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+}
+
+@media (min-width: 768px) {
+  .fractal-control-panel {
+    width: 20rem; /* w-80 */
+  }
+}
+
+.fractal-control-header {
+  padding: 1rem;
+  border-bottom: 1px solid #1e293b; /* slate-800 */
+}
+
+.fractal-control-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #22d3ee; /* cyan-400 */
+  margin-bottom: 0.25rem;
+}
+
+.fractal-control-subtitle {
+  font-size: 0.75rem;
+  color: #64748b; /* slate-500 */
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+.fractal-control-content {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.fractal-status {
+  background-color: #020617; /* slate-950 */
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  border: 1px solid #1e293b; /* slate-800 */
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 0.75rem;
+}
+
+.fractal-status-row {
+  display: flex;
+  justify-content: space-between;
+  color: #94a3b8; /* slate-400 */
+}
+
+.fractal-status-row:not(:first-child) {
+  margin-top: 0.25rem;
+}
+
+.fractal-status-value {
+  color: #ffffff;
+}
+
+.fractal-status-symmetry {
+  color: #fbbf24; /* yellow-400 */
+}
+
+.fractal-status-warning {
+  margin-top: 0.5rem;
+  color: #f87171; /* red-400 */
+  border-top: 1px solid #1e293b; /* slate-800 */
+  padding-top: 0.25rem;
+}
+
+.fractal-control-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fractal-section-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #cbd5e1; /* slate-300 */
+  border-bottom: 1px solid #475569; /* slate-700 */
+  padding-bottom: 0.25rem;
+}
+
+.fractal-symmetry-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1e293b; /* slate-800 */
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #475569; /* slate-700 */
+}
+
+.fractal-symmetry-label {
+  font-size: 0.75rem;
+  color: #94a3b8; /* slate-400 */
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  text-transform: uppercase;
+}
+
+.fractal-symmetry-button {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  border-radius: 0.25rem;
+  font-weight: 700;
+  transition: background-color 0.2s;
+  cursor: pointer;
+  border: none;
+  color: #ffffff;
+}
+
+.fractal-symmetry-button-dn {
+  background-color: #9333ea; /* purple-600 */
+}
+
+.fractal-symmetry-button-dn:hover {
+  background-color: #a855f7; /* purple-500 */
+}
+
+.fractal-symmetry-button-zn {
+  background-color: #2563eb; /* blue-600 */
+}
+
+.fractal-symmetry-button-zn:hover {
+  background-color: #3b82f6; /* blue-500 */
+}
+
+.fractal-coefficients-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.fractal-actions {
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fractal-button {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: background-color 0.2s;
+  cursor: pointer;
+  border: 1px solid;
+}
+
+.fractal-button-clear {
+  background-color: #475569; /* slate-700 */
+  color: #ffffff;
+  border-color: #475569; /* slate-600 */
+}
+
+.fractal-button-clear:hover {
+  background-color: #475569; /* slate-600 */
+}
+
+.fractal-button-reset {
+  background-color: rgba(127, 29, 29, 0.5); /* red-900/50 */
+  color: #fca5a5; /* red-200 */
+  border-color: #7f1d1d; /* red-900 */
+}
+
+.fractal-button-reset:hover {
+  background-color: rgba(127, 29, 29, 0.8); /* red-900/80 */
+}
+
+.fractal-button-save {
+  background-color: rgba(2, 44, 34, 0.5); /* emerald-900/50 */
+  color: #34d399; /* emerald-400 */
+  border-color: #022c22; /* emerald-900 */
+}
+
+.fractal-button-save:hover {
+  background-color: rgba(2, 44, 34, 0.8); /* emerald-900/80 */
+}
+
+.fractal-button-load {
+  background-color: #1e293b; /* slate-800 */
+  color: #94a3b8; /* slate-400 */
+  border-color: #475569; /* slate-700 */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fractal-button-load:hover {
+  background-color: #475569; /* slate-700 */
+  color: #ffffff;
+}
+
+.fractal-file-input {
+  display: none;
+}
+
+.fractal-render-mode-toggle {
+  display: flex;
+  gap: 0.25rem;
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  border: 1px solid #475569; /* slate-700 */
+  background-color: #1e293b; /* slate-800 */
+}
+
+.fractal-render-mode-button {
+  flex: 1;
+  padding: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s, color 0.2s;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #64748b; /* slate-500 */
+}
+
+.fractal-render-mode-button:hover {
+  color: #cbd5e1; /* slate-300 */
+}
+
+.fractal-render-mode-button-active {
+  background-color: #475569; /* slate-700 */
+  color: #22d3ee; /* cyan-400 */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.fractal-histogram-colors {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.fractal-color-setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fractal-color-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #cbd5e1; /* slate-300 */
+  text-transform: uppercase;
+}
+
+.fractal-color-input {
+  height: 1.5rem;
+  width: 3rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 0.25rem;
+}
+
+.fractal-presets-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.fractal-clear-on-load-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.fractal-checkbox {
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+  accent-color: #22d3ee; /* cyan-400 */
+}
+
+.fractal-checkbox-label {
+  font-size: 0.75rem;
+  color: #94a3b8; /* slate-400 */
+  user-select: none;
+}
+
+.fractal-presets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 12rem;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.fractal-preset-item {
+  background-color: #0f172a; /* slate-900 */
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  border: 1px solid #1e293b; /* slate-800 */
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s, border-color 0.2s;
+  width: 100%;
+}
+
+.fractal-preset-item:hover {
+  background-color: #1e293b; /* slate-800 */
+  border-color: #22d3ee; /* cyan-400 */
+}
+
+.fractal-preset-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #cbd5e1; /* slate-300 */
+  margin-bottom: 0.25rem;
+}
+
+.fractal-preset-figure {
+  font-size: 0.75rem;
+  color: #64748b; /* slate-500 */
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  margin-bottom: 0.125rem;
+}
+
+.fractal-preset-info {
+  font-size: 0.75rem;
+  color: #fbbf24; /* yellow-400 */
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+

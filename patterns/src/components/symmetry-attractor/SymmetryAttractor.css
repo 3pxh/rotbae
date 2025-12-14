@@ -1,0 +1,79 @@
+.symmetry-attractor-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background-color: #0f172a; /* slate-900 */
+  color: #e2e8f0; /* slate-200 */
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+@media (min-width: 768px) {
+  .symmetry-attractor-container {
+    flex-direction: row;
+  }
+}
+
+.symmetry-attractor-sidebar {
+  width: 100%;
+  flex-shrink: 0;
+  border-right: 1px solid #334155; /* slate-700 */
+  background-color: rgba(30, 41, 59, 0.5); /* slate-800/50 */
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+@media (min-width: 768px) {
+  .symmetry-attractor-sidebar {
+    width: 20rem; /* w-80 */
+  }
+}
+
+.symmetry-attractor-canvas-area {
+  flex: 1;
+  position: relative;
+  background-color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.symmetry-attractor-overlay {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  pointer-events: none;
+  font-size: 0.75rem;
+  color: #64748b; /* slate-500 */
+  text-align: right;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  backdrop-filter: blur(4px);
+}
+
+.symmetry-attractor-overlay p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Custom scrollbar styles */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(51, 65, 85, 0.8);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(71, 85, 105, 0.9);
+}
+

@@ -1,0 +1,5 @@
+{
+  "name": "Symmetric IFS Fractal Generator",
+  "description": "A web-based implementation of a BASIC program for generating symmetric fractals using Iterated Function Systems (IFS). Explore Dn and Zn symmetries with interactive parameter controls.",
+  "requestFramePermissions": []
+}

@@ -1,0 +1,144 @@
+{
+  "tables": [
+    {
+      "table_id": "A3",
+      "title": "Data for square quilts",
+      "columns": ["Figure", "lambda", "alpha", "beta", "gamma", "omega", "Shift", "m", "Name"],
+      "data": [
+        {
+          "figure": "2.6",
+          "lambda": -0.59,
+          "alpha": 0.2,
+          "beta": 0.1,
+          "gamma": -0.33,
+          "omega": 0.0,
+          "shift": "(0, 0)",
+          "m": 2,
+          "name": "Emerald Mosaic"
+        },
+        {
+          "figure": "2.12",
+          "lambda": -0.59,
+          "alpha": 0.2,
+          "beta": 0.1,
+          "gamma": -0.27,
+          "omega": 0.0,
+          "shift": "(1/2, 1/2)",
+          "m": 0,
+          "name": "Sugar and Spice"
+        },
+        {
+          "figure": "3.18(b)",
+          "lambda": -0.2,
+          "alpha": -0.1,
+          "beta": 0.1,
+          "gamma": -0.25,
+          "omega": 0.0,
+          "shift": "(0, 0)",
+          "m": 0,
+          "name": "Sicilian Tile"
+        },
+        {
+          "figure": "3.20(b)",
+          "lambda": 0.25,
+          "alpha": -0.3,
+          "beta": 0.2,
+          "gamma": 0.3,
+          "omega": 0.0,
+          "shift": "(0, 0)",
+          "m": 1,
+          "name": "Roses"
+        },
+        {
+          "figure": "3.21(b)",
+          "lambda": -0.28,
+          "alpha": 0.25,
+          "beta": 0.05,
+          "gamma": -0.24,
+          "omega": 0.0,
+          "shift": "(0, 0)",
+          "m": -1,
+          "name": "Wagonwheels"
+        },
+        {
+          "figure": "3.23(e)",
+          "lambda": -0.12,
+          "alpha": -0.36,
+          "beta": 0.18,
+          "gamma": -0.14,
+          "omega": 0.0,
+          "shift": "(1/2, 1/2)",
+          "m": 1,
+          "name": "Victorian Tiles"
+        },
+        {
+          "figure": "3.24(a)",
+          "lambda": 0.1,
+          "alpha": 0.2,
+          "beta": 0.1,
+          "gamma": 0.39,
+          "omega": 0.0,
+          "shift": "(0, 0)",
+          "m": -1,
+          "name": "Mosque"
+        },
+        {
+          "figure": "3.24(b)",
+          "lambda": -0.589,
+          "alpha": 0.2,
+          "beta": 0.04,
+          "gamma": -0.2,
+          "omega": 0.0,
+          "shift": "(1/2, 1/2)",
+          "m": 0,
+          "name": "Red Tiles"
+        },
+        {
+          "figure": "3.25(b)",
+          "lambda": -0.28,
+          "alpha": 0.08,
+          "beta": 0.45,
+          "gamma": -0.05,
+          "omega": 0.0,
+          "shift": "(0, 0)",
+          "m": 2,
+          "name": "Cathedral Attractor"
+        },
+        {
+          "figure": "6.1",
+          "lambda": -0.59,
+          "alpha": 0.2,
+          "beta": 0.2,
+          "gamma": 0.3,
+          "omega": 0.0,
+          "shift": "(0, 0)",
+          "m": 0,
+          "name": "Gyroscopes"
+        },
+        {
+          "figure": "6.2",
+          "lambda": -0.28,
+          "alpha": 0.25,
+          "beta": 0.05,
+          "gamma": -0.24,
+          "omega": 0.0,
+          "shift": "(1/2, 1/2)",
+          "m": -1,
+          "name": "Cats Eyes"
+        },
+        {
+          "figure": "6.3",
+          "lambda": -0.11,
+          "alpha": -0.26,
+          "beta": 0.19,
+          "gamma": -0.059,
+          "omega": 0.07,
+          "shift": "(1/2, 1/2)",
+          "m": 2,
+          "name": "Flowers with Ribbons"
+        }
+      ]
+    }
+  ]
+}
+

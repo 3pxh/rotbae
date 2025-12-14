@@ -1,0 +1,17 @@
+.symmetric-fractal-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: #0f172a; /* slate-900 */
+  color: #f1f5f9; /* slate-100 */
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+@media (min-width: 768px) {
+  .symmetric-fractal-container {
+    flex-direction: row;
+  }
+}
+

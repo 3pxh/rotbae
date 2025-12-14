@@ -1,0 +1,31 @@
+.square-quilt-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.square-quilt-input-label {
+  font-size: 0.75rem;
+  color: #94a3b8; /* slate-400 */
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.square-quilt-input-field {
+  background-color: #1e293b; /* slate-800 */
+  border: 1px solid #475569; /* slate-700 */
+  color: #e2e8f0; /* slate-200 */
+  font-size: 0.875rem;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  transition: border-color 0.2s;
+}
+
+.square-quilt-input-field:focus {
+  outline: none;
+  border-color: #06b6d4; /* cyan-500 */
+}
+
