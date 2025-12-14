@@ -35,7 +35,7 @@ export const FractalCanvas: React.FC<FractalCanvasProps> = ({
   histogramColors
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const requestRef = useRef<number>();
+  const requestRef = useRef<number | undefined>(undefined);
   
   // Simulation state refs to avoid closure staleness in loop
   const posRef = useRef({ x: 0.1, y: -0.01 });

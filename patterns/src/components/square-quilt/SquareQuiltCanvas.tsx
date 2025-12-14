@@ -45,7 +45,7 @@ export const SquareQuiltCanvas: React.FC<SquareQuiltCanvasProps> = ({
   onClearComplete 
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const requestRef = useRef<number>();
+  const requestRef = useRef<number | undefined>(undefined);
   
   // Simulation state refs
   const posRef = useRef({ x: 0.1, y: 0.334 });

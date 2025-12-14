@@ -98,7 +98,7 @@ export const SquareQuilt: React.FC = () => {
         if (json.tables && Array.isArray(json.tables) && json.tables.length > 0) {
           const table = json.tables[0];
           if (table.data && Array.isArray(table.data)) {
-            const presets = table.data.map(convertToPreset).filter((p): p is Preset => p !== null);
+            const presets = table.data.map(convertToPreset).filter((p: Preset | null): p is Preset => p !== null);
             if (presets.length > 0) {
               setLoadedPresets(presets);
               setParams(presets[0]);
