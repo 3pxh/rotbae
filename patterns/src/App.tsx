@@ -63,8 +63,13 @@ function PatternsGrid() {
 }
 
 function App() {
+  // Detect if we're accessed via subdomain (patterns.rotbae.com/) or path (rotbae.com/patterns/)
+  // If pathname starts with /patterns, we're in path-based mode, otherwise subdomain mode
+  const pathname = window.location.pathname;
+  const basename = pathname.startsWith('/patterns') ? '/patterns' : '';
+
   return (
-    <BrowserRouter basename="/patterns">
+    <BrowserRouter basename={basename}>
       <Routes>
         <Route path="/" element={<PatternsGrid />} />
         <Route path="/symmetry-attractor" element={<SymmetryAttractorPage />} />
