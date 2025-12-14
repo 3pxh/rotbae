@@ -1,5 +1,5 @@
 import React from 'react';
-import type { SimulationParams, Preset } from './types';
+import type { SimulationParams } from './types';
 import { PRESETS } from './types';
 import './ControlPanel.css';
 
