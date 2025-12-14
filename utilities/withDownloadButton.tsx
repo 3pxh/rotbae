@@ -8,8 +8,9 @@ export interface DownloadableComponentRef {
   getCanvasElement?: () => HTMLCanvasElement | null
 }
 
-export const withDownloadButton = <P extends object>(
-  WrappedComponent: React.ForwardRefExoticComponent<React.PropsWithoutRef<P> & React.RefAttributes<DownloadableComponentRef>>
+export const withDownloadButton = <P extends Record<string, any> = {}>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  WrappedComponent: React.ComponentType<any>
 ) => {
   const WithDownloadButtonComponent = (props: P) => {
     const appRef = useRef<DownloadableComponentRef>(null)
@@ -317,4 +318,3 @@ export const withDownloadButton = <P extends object>(
 
   return WithDownloadButtonComponent
 }
-

@@ -1,5 +1,5 @@
 import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react'
-import { withDownloadButton, type DownloadableComponentRef } from './withDownloadButton'
+import { withDownloadButton, type DownloadableComponentRef } from '@utilities/withDownloadButton'
 import './App.css'
 
 const App = forwardRef<DownloadableComponentRef>((_props, ref) => {
@@ -56,5 +56,7 @@ const App = forwardRef<DownloadableComponentRef>((_props, ref) => {
 
 App.displayName = 'App'
 
-export default withDownloadButton(App)
+// Type assertion to bypass React types version mismatch in monorepo
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default withDownloadButton(App as any)
 
