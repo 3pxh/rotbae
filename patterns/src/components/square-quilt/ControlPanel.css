@@ -1,11 +1,15 @@
 .square-quilt-control-panel {
-  width: 100%;
-  background-color: #0f172a; /* slate-900 */
-  border-right: 1px solid #1e293b; /* slate-800 */
-  display: flex;
-  flex-direction: column;
+  background-color: rgba(30, 41, 59, 0.5); /* slate-800/50 */
+  backdrop-filter: blur(8px);
+  border-left: 1px solid #475569; /* slate-700 */
+  padding: 1.5rem;
   height: 100%;
   overflow-y: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  z-index: 10;
 }
 
 @media (min-width: 768px) {
@@ -15,212 +19,269 @@
 }
 
 .square-quilt-control-header {
-  padding: 1rem;
-  border-bottom: 1px solid #1e293b; /* slate-800 */
+  margin-bottom: 1.5rem;
 }
 
 .square-quilt-control-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #22d3ee; /* cyan-400 */
-  margin-bottom: 0.25rem;
+  color: #ffffff;
+  margin: 0 0 0.25rem 0;
 }
 
 .square-quilt-control-subtitle {
   font-size: 0.75rem;
   color: #64748b; /* slate-500 */
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  margin: 0;
 }
 
-.square-quilt-control-content {
-  padding: 1rem;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+.square-quilt-presets-section {
+  margin-bottom: 1.5rem;
 }
 
-.square-quilt-status {
-  background-color: #020617; /* slate-950 */
-  padding: 0.75rem;
-  border-radius: 0.25rem;
-  border: 1px solid #1e293b; /* slate-800 */
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+.square-quilt-presets-title {
   font-size: 0.75rem;
+  font-weight: 700;
+  color: #cbd5e1; /* slate-300 */
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.05em;
 }
 
-.square-quilt-status-row {
-  display: flex;
-  justify-content: space-between;
-  color: #94a3b8; /* slate-400 */
+.square-quilt-presets-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
 }
 
-.square-quilt-status-row:not(:first-child) {
-  margin-top: 0.25rem;
+.square-quilt-preset-button {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #cbd5e1; /* slate-300 */
+  background-color: #475569; /* slate-700 */
+  border: none;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s, color 0.2s;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
 }
 
-.square-quilt-status-value {
+.square-quilt-preset-button:hover {
+  background-color: #0ea5e9; /* sky-600 */
   color: #ffffff;
 }
 
-.square-quilt-control-section {
+.square-quilt-controls-scroll {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.square-quilt-controls-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.square-quilt-slider {
+  margin-bottom: 1rem;
+}
+
+.square-quilt-slider-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.square-quilt-slider-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #94a3b8; /* slate-400 */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.square-quilt-slider-value {
+  font-size: 0.75rem;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  color: #38bdf8; /* sky-400 */
+}
+
+.square-quilt-slider-input {
+  width: 100%;
+  height: 0.5rem;
+  background-color: #475569; /* slate-700 */
+  border-radius: 0.5rem;
+  appearance: none;
+  cursor: pointer;
+  transition: accent-color 0.2s;
+}
+
+.square-quilt-slider-input::-webkit-slider-thumb {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: #0ea5e9; /* sky-500 */
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.square-quilt-slider-input::-webkit-slider-thumb:hover {
+  background-color: #38bdf8; /* sky-400 */
+}
+
+.square-quilt-slider-input::-moz-range-thumb {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: #0ea5e9; /* sky-500 */
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s;
+}
+
+.square-quilt-slider-input::-moz-range-thumb:hover {
+  background-color: #38bdf8; /* sky-400 */
+}
+
+.square-quilt-settings-section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #475569; /* slate-700 */
+}
+
+.square-quilt-settings-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #cbd5e1; /* slate-300 */
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.square-quilt-shift-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.square-quilt-shift-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #94a3b8; /* slate-400 */
+  text-transform: uppercase;
+}
+
+.square-quilt-shift-button {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #475569; /* slate-600 */
+  background-color: #475569; /* slate-700 */
+  color: #94a3b8; /* slate-400 */
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  cursor: pointer;
+}
+
+.square-quilt-shift-button:hover {
+  background-color: #64748b; /* slate-600 */
+}
+
+.square-quilt-shift-button-active {
+  background-color: rgba(14, 165, 233, 0.2); /* sky-500/20 */
+  border-color: #0ea5e9; /* sky-500 */
+  color: #38bdf8; /* sky-400 */
+}
+
+.square-quilt-color-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.square-quilt-color-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #94a3b8; /* slate-400 */
+  text-transform: uppercase;
+}
+
+.square-quilt-color-input {
+  height: 1.5rem;
+  width: 3rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 0.25rem;
+}
+
+.square-quilt-actions {
+  margin-top: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-.square-quilt-section-title {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #cbd5e1; /* slate-300 */
-  border-bottom: 1px solid #475569; /* slate-700 */
-  padding-bottom: 0.25rem;
-}
-
-.square-quilt-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #1e293b; /* slate-800 */
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  border: 1px solid #475569; /* slate-700 */
-}
-
-.square-quilt-toggle-label {
-  font-size: 0.75rem;
-  color: #94a3b8; /* slate-400 */
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
-  text-transform: uppercase;
-}
-
-.square-quilt-toggle-button {
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
-  border-radius: 0.25rem;
+.square-quilt-action-button {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
   font-weight: 700;
-  transition: background-color 0.2s;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
   cursor: pointer;
   border: none;
-  color: #ffffff;
-  background-color: #475569; /* slate-700 */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-.square-quilt-toggle-button:hover {
+.square-quilt-action-button-toggle {
+  padding: 0.75rem;
+}
+
+.square-quilt-action-button-start {
+  background-color: #10b981; /* emerald-500 */
+  color: #ffffff;
+}
+
+.square-quilt-action-button-start:hover {
+  background-color: #059669; /* emerald-600 */
+  box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2), 0 4px 6px -2px rgba(16, 185, 129, 0.1);
+}
+
+.square-quilt-action-button-pause {
+  background-color: rgba(245, 158, 11, 0.1); /* amber-500/10 */
+  color: #f59e0b; /* amber-500 */
+  border: 1px solid rgba(245, 158, 11, 0.5); /* amber-500/50 */
+}
+
+.square-quilt-action-button-pause:hover {
+  background-color: rgba(245, 158, 11, 0.2); /* amber-500/20 */
+}
+
+.square-quilt-action-buttons-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.square-quilt-action-button-secondary {
+  flex: 1;
+  padding: 0.5rem;
+  background-color: #475569; /* slate-700 */
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.75rem;
+  box-shadow: none;
+}
+
+.square-quilt-action-button-secondary:hover {
   background-color: #64748b; /* slate-600 */
 }
-
-.square-quilt-toggle-button-active {
-  background-color: #22d3ee; /* cyan-400 */
-  color: #000000;
-}
-
-.square-quilt-toggle-button-active:hover {
-  background-color: #06b6d4; /* cyan-500 */
-}
-
-.square-quilt-actions {
-  padding-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.square-quilt-button {
-  width: 100%;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  transition: background-color 0.2s;
-  cursor: pointer;
-  border: 1px solid;
-}
-
-.square-quilt-button-clear {
-  background-color: #475569; /* slate-700 */
-  color: #ffffff;
-  border-color: #475569; /* slate-600 */
-}
-
-.square-quilt-button-clear:hover {
-  background-color: #475569; /* slate-600 */
-}
-
-.square-quilt-button-reset {
-  background-color: rgba(127, 29, 29, 0.5); /* red-900/50 */
-  color: #fca5a5; /* red-200 */
-  border-color: #7f1d1d; /* red-900 */
-}
-
-.square-quilt-button-reset:hover {
-  background-color: rgba(127, 29, 29, 0.8); /* red-900/80 */
-}
-
-.square-quilt-button-save {
-  background-color: rgba(2, 44, 34, 0.5); /* emerald-900/50 */
-  color: #34d399; /* emerald-400 */
-  border-color: #022c22; /* emerald-900 */
-}
-
-.square-quilt-button-save:hover {
-  background-color: rgba(2, 44, 34, 0.8); /* emerald-900/80 */
-}
-
-.square-quilt-button-load {
-  background-color: #1e293b; /* slate-800 */
-  color: #94a3b8; /* slate-400 */
-  border-color: #475569; /* slate-700 */
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.square-quilt-button-load:hover {
-  background-color: #475569; /* slate-700 */
-  color: #ffffff;
-}
-
-.square-quilt-file-input {
-  display: none;
-}
-
-.square-quilt-presets-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  max-height: 12rem;
-  overflow-y: auto;
-  padding-right: 0.25rem;
-}
-
-.square-quilt-preset-item {
-  background-color: #0f172a; /* slate-900 */
-  padding: 0.75rem;
-  border-radius: 0.25rem;
-  border: 1px solid #1e293b; /* slate-800 */
-  cursor: pointer;
-  text-align: left;
-  transition: background-color 0.2s, border-color 0.2s;
-  width: 100%;
-}
-
-.square-quilt-preset-item:hover {
-  background-color: #1e293b; /* slate-800 */
-  border-color: #22d3ee; /* cyan-400 */
-}
-
-.square-quilt-preset-name {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #cbd5e1; /* slate-300 */
-  margin-bottom: 0.25rem;
-}
-
-.square-quilt-preset-figure {
-  font-size: 0.75rem;
-  color: #64748b; /* slate-500 */
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
-}
-

@@ -27,8 +27,8 @@ const patterns: PatternLink[] = [
   {
     name: 'Square Quilt',
     slug: 'square-quilt',
-    image: '/patterns/square-quilt.svg',
-    description: 'BASIC fractal generator creating periodic quilt-like patterns.',
+    image: '/patterns/square-quilt.png',
+    description: 'Enhanced square quilt with speed, opacity, and color controls.',
   },
 ]
 
@@ -75,7 +75,6 @@ function App() {
         <Route path="/symmetry-attractor" element={<SymmetryAttractorPage />} />
         <Route path="/symmetric-fractal-program" element={<SymmetricFractalProgramPage />} />
         <Route path="/square-quilt" element={<SquareQuiltPage />} />
-        <Route path="/square-quilts" element={<SquareQuiltPage />} />
       </Routes>
     </BrowserRouter>
   )

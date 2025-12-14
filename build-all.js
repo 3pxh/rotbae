@@ -9,6 +9,7 @@ const subdomains = fs.readdirSync('.')
            !file.startsWith('.') &&
            file !== 'node_modules' &&
            file !== 'dist' &&
+           file !== 'utilities' && // Exclude utilities - it's a shared library, not a buildable project
            fs.existsSync(path.join(filePath, 'package.json'));
   });
 
@@ -20,6 +21,21 @@ if (subdomains.length === 0) {
 // Create dist directory
 if (!fs.existsSync('dist')) {
   fs.mkdirSync('dist');
+}
+
+// Install utilities dependencies first (required by subdomains)
+if (fs.existsSync('utilities/package.json')) {
+  console.log('\n=== Installing utilities dependencies ===');
+  try {
+    execSync('npm install', {
+      cwd: 'utilities',
+      stdio: 'inherit'
+    });
+    console.log('✓ Utilities dependencies installed');
+  } catch (error) {
+    console.error('✗ Failed to install utilities dependencies:', error.message);
+    process.exit(1);
+  }
 }
 
 subdomains.forEach(subdomain => {

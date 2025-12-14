@@ -5,13 +5,69 @@
   width: 100vw;
   overflow: hidden;
   background-color: #0f172a; /* slate-900 */
-  color: #f1f5f9; /* slate-100 */
-  font-family: ui-sans-serif, system-ui, sans-serif;
 }
 
 @media (min-width: 768px) {
   .square-quilt-container {
     flex-direction: row;
+  }
+}
+
+.square-quilt-canvas-area {
+  position: relative;
+  flex: 1;
+  height: 60vh;
+  order: 1;
+}
+
+@media (min-width: 768px) {
+  .square-quilt-canvas-area {
+    height: auto;
+  }
+}
+
+.square-quilt-canvas-wrapper {
+  position: absolute;
+  inset: 0;
+}
+
+.square-quilt-overlay {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.square-quilt-overlay-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.25rem 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  opacity: 0.8;
+}
+
+.square-quilt-overlay-subtitle {
+  font-size: 0.75rem;
+  color: #94a3b8; /* slate-400 */
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  margin: 0;
+  opacity: 0.7;
+}
+
+.square-quilt-sidebar {
+  order: 2;
+  height: 40vh;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .square-quilt-sidebar {
+    height: auto;
+    width: 20rem;
+    flex-shrink: 0;
   }
 }
 

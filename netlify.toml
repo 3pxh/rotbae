@@ -3,7 +3,7 @@
 # Routing is handled by Edge Function (netlify/edge-functions/subdomain-router.ts)
 
 [build]
-  command = "npm install && npm run build:all"
+  command = "npm install && cd utilities && npm install && cd .. && npm run build:all"
   publish = "dist"
 
 # Edge Functions handle Host-based routing
@@ -41,6 +41,12 @@
 [[redirects]]
   from = "/patterns/*"
   to = "/patterns/index.html"
+  status = 200
+  force = false
+
+[[redirects]]
+  from = "/testCanvas/*"
+  to = "/testCanvas/index.html"
   status = 200
   force = false
 
