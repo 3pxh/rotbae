@@ -14,7 +14,7 @@ export class AsciiRenderer implements IRenderer {
   private readonly charWidth = 8 // Approximate width of 8pt monospace character
   private readonly charHeight = 8 // Approximate height of 8pt monospace character
 
-  canRender(context: RendererContext): boolean {
+  canRender(_context: RendererContext): boolean {
     return true // Can always render
   }
 

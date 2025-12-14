@@ -8,7 +8,7 @@ export class FullRenderer implements IRenderer {
   readonly label = 'full'
   readonly defaultEnabled = true
 
-  canRender(context: RendererContext): boolean {
+  canRender(_context: RendererContext): boolean {
     return true // Can always render
   }
 

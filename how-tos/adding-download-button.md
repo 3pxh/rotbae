@@ -59,14 +59,16 @@ export default defineConfig({
 - Import `path` from `'path'`
 - Add `resolve.alias` configuration pointing to `../utilities`
 
-### Step 3: Install Dependencies
+### Step 3: Install Utilities Dependencies
 
-Ensure you have `jszip` installed (required for ZIP downloads):
+The `withDownloadButton` utility requires `jszip` to be installed in the utilities directory:
 
 ```bash
-npm install jszip
-npm install --save-dev @types/jszip
+cd ../utilities
+npm install
 ```
+
+This only needs to be done once (or when utilities dependencies change). The build process will handle this automatically.
 
 ### Step 4: Wrap Your Canvas Component
 
@@ -186,12 +188,16 @@ cd my-canvas-project
 npm install
 ```
 
-### Step 2: Install Required Dependencies
+### Step 2: Install Utilities Dependencies
+
+The `withDownloadButton` utility requires `jszip` to be installed in the utilities directory:
 
 ```bash
-npm install jszip
-npm install --save-dev @types/jszip
+cd ../utilities
+npm install
 ```
+
+This only needs to be done once (or when utilities dependencies change). The build process will handle this automatically.
 
 ### Step 3: Configure TypeScript
 
@@ -267,7 +273,31 @@ The `withDownloadButton` HOC provides:
    - **Renderer Options**: Full color, Greyscale, ASCII art
    - **File Naming**: Custom name input with timestamp
    - **Preview**: Live preview with crop outlines
-3. **Multiple Downloads**: Automatically creates ZIP when multiple size/renderer combinations are selected
+3. **Multiple Downloads**: Automatically creates a ZIP file when multiple size/renderer combinations are selected
+
+## Implementation Notes
+
+### Utilities as a Package
+
+The `utilities` directory is set up as a proper npm package with its own `package.json` and `node_modules`. This allows it to have its own dependencies (like `jszip`) while being shared across multiple projects in the monorepo.
+
+**Why This Approach:**
+- **Self-contained**: Utilities can declare its own dependencies without requiring each consuming project to install them
+- **TypeScript Resolution**: TypeScript can properly resolve dependencies when type-checking utilities files
+- **ZIP Support**: Uses `jszip` library to create ZIP archives for multiple file downloads
+- **Build Integration**: The `build-all.js` script automatically installs utilities dependencies before building subdomains
+
+**Setup Requirements:**
+- Run `npm install` in the `utilities` directory once (or when dependencies change)
+- The build process handles this automatically, but you may need to do it manually for local development
+
+**Dependencies:**
+- `jszip` - For creating ZIP archives when multiple files are downloaded
+- `@types/react` - For TypeScript type definitions (dev dependency)
+
+**Trade-offs:**
+- **Pros**: Proper dependency management, ZIP file support, TypeScript resolution works correctly
+- **Cons**: Requires `npm install` in utilities directory, adds ~50KB to bundle size (jszip)
 
 ## Troubleshooting
 

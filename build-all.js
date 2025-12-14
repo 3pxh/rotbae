@@ -22,6 +22,21 @@ if (!fs.existsSync('dist')) {
   fs.mkdirSync('dist');
 }
 
+// Install utilities dependencies first (required by subdomains)
+if (fs.existsSync('utilities/package.json')) {
+  console.log('\n=== Installing utilities dependencies ===');
+  try {
+    execSync('npm install', {
+      cwd: 'utilities',
+      stdio: 'inherit'
+    });
+    console.log('✓ Utilities dependencies installed');
+  } catch (error) {
+    console.error('✗ Failed to install utilities dependencies:', error.message);
+    process.exit(1);
+  }
+}
+
 subdomains.forEach(subdomain => {
   console.log(`\n=== Building ${subdomain} ===`);
   try {

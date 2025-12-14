@@ -8,7 +8,7 @@ export class GreyscaleRenderer implements IRenderer {
   readonly label = 'greyscale'
   readonly defaultEnabled = false
 
-  canRender(context: RendererContext): boolean {
+  canRender(_context: RendererContext): boolean {
     return true // Can always render
   }
 
