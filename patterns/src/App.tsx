@@ -21,7 +21,7 @@ const patterns: PatternLink[] = [
   {
     name: 'Symmetric Fractal Program',
     slug: 'symmetric-fractal-program',
-    image: '/patterns/symmetric-fractal-program.svg',
+    image: '/patterns/symmetric-fractal.png',
     description: 'Iterated Function System fractal generator with rotational and reflectional symmetry.',
   },
   {
