@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import type { SimulationParams, SavedPreset } from './types';
 import './ControlPanel.css';
 
@@ -10,13 +10,8 @@ interface ControlPanelProps {
   onReset: () => void;
   onClear: () => void;
   onRestart: () => void;
-  onSaveImage: () => void;
   savedPresets: SavedPreset[];
-  onSavePreset: () => void;
-  onLoadPreset: (preset: SavedPreset) => void;
-  onRemovePreset: (id: string) => void;
-  onImportPresets: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onDownloadPresets: () => void;
+  onLoadPreset: (preset: SavedPreset, clearCanvas?: boolean) => void;
   color: string;
   onColorChange: (color: string) => void;
   renderMode: 'chalk' | 'glow' | 'histogram';
@@ -29,7 +24,14 @@ interface ControlPanelProps {
 
 // Helper to calculate estimated points per second based on logic in SimulationCanvas
 const calculatePtsPerSec = (speedVal: number, mode: 'chalk' | 'glow' | 'histogram') => {
-    const t = (speedVal - 1) / 99;
+    const FPS = 60; // Approximate frames per second
+    
+    if (speedVal === 1) {
+        // At minimum speed, 1 point per second
+        return 1;
+    }
+    
+    const t = (speedVal - 2) / 98; // Speed 2-100 maps to t 0-1
     let batchSize;
     
     if (mode === 'histogram') {
@@ -42,7 +44,7 @@ const calculatePtsPerSec = (speedVal: number, mode: 'chalk' | 'glow' | 'histogra
         batchSize = Math.floor(min + (max - min) * t);
     }
     
-    return batchSize * 60; // Assuming ~60fps
+    return batchSize * FPS;
 };
 
 const formatRate = (rate: number) => {
@@ -114,13 +116,8 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
     onReset,
     onClear,
     onRestart,
-    onSaveImage,
     savedPresets,
-    onSavePreset,
     onLoadPreset,
-    onRemovePreset,
-    onImportPresets,
-    onDownloadPresets,
     color,
     onColorChange,
     renderMode,
@@ -130,94 +127,135 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
     speed,
     onSpeedChange
 }) => {
+  const [currentPresetIndex, setCurrentPresetIndex] = useState<number>(0);
+  const [showDropdown, setShowDropdown] = useState<boolean>(false);
+  const [clearOnPresetChange, setClearOnPresetChange] = useState<boolean>(true);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
   const currentRate = calculatePtsPerSec(speed, renderMode);
   const minRate = calculatePtsPerSec(1, renderMode);
   const maxRate = calculatePtsPerSec(100, renderMode);
 
+  // Update current preset index when presets change
+  useEffect(() => {
+    if (savedPresets.length > 0 && currentPresetIndex >= savedPresets.length) {
+      setCurrentPresetIndex(Math.max(0, savedPresets.length - 1));
+    }
+  }, [savedPresets.length, currentPresetIndex]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+
+    if (showDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showDropdown]);
+
+  const handlePrevPreset = () => {
+    if (savedPresets.length === 0) return;
+    const newIndex = currentPresetIndex > 0 ? currentPresetIndex - 1 : savedPresets.length - 1;
+    setCurrentPresetIndex(newIndex);
+    onLoadPreset(savedPresets[newIndex], clearOnPresetChange);
+  };
+
+  const handleNextPreset = () => {
+    if (savedPresets.length === 0) return;
+    const newIndex = currentPresetIndex < savedPresets.length - 1 ? currentPresetIndex + 1 : 0;
+    setCurrentPresetIndex(newIndex);
+    onLoadPreset(savedPresets[newIndex], clearOnPresetChange);
+  };
+
+  const handlePresetClick = (preset: SavedPreset, index: number) => {
+    setCurrentPresetIndex(index);
+    onLoadPreset(preset, clearOnPresetChange);
+    setShowDropdown(false);
+  };
+
+  const currentPreset = savedPresets.length > 0 ? savedPresets[currentPresetIndex] : null;
+
   return (
     <div className="control-panel">
         
-        {/* Main Controls */}
-        <div className="control-section">
-            <button 
-                onClick={onSaveImage}
-                className="control-button-full"
-            >
-                Save Image
-            </button>
-            
-            <div className="control-buttons-row">
-                <button 
-                    onClick={() => setIsRunning(!isRunning)}
-                    className={`control-button ${
-                        isRunning 
-                        ? 'control-button-pause' 
-                        : 'control-button-resume'
-                    }`}
-                >
-                    {isRunning ? 'Pause' : 'Resume'}
-                </button>
-                <button 
-                    onClick={onRestart}
-                    className="control-button control-button-restart"
-                >
-                    Restart
-                </button>
-                <button 
-                    onClick={onClear}
-                    className="control-button control-button-clear"
-                >
-                    Clear
-                </button>
+        {/* Presets Navigation */}
+        {savedPresets.length > 0 && (
+          <div className="control-section presets-navigation">
+            <div className="presets-nav-container" ref={dropdownRef}>
+              <button 
+                onClick={handlePrevPreset}
+                className="preset-nav-button preset-nav-prev"
+                aria-label="Previous preset"
+              >
+                &lt;
+              </button>
+              <button
+                onClick={() => setShowDropdown(!showDropdown)}
+                className="preset-nav-current"
+              >
+                {currentPreset?.name || 'No Preset'}
+              </button>
+              <button 
+                onClick={handleNextPreset}
+                className="preset-nav-button preset-nav-next"
+                aria-label="Next preset"
+              >
+                &gt;
+              </button>
+              
+              {showDropdown && (
+                <div className="presets-dropdown custom-scrollbar">
+                  {savedPresets.map((preset, index) => (
+                    <button
+                      key={preset.id}
+                      onClick={() => handlePresetClick(preset, index)}
+                      className={`preset-dropdown-item ${index === currentPresetIndex ? 'preset-dropdown-item-active' : ''}`}
+                    >
+                      <div className="preset-dropdown-name">{preset.name}</div>
+                      <div className="preset-dropdown-params">
+                        λ:{preset.params.lambda.toFixed(1)} n:{preset.params.n}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <label className="preset-clear-checkbox">
+              <input
+                type="checkbox"
+                checked={clearOnPresetChange}
+                onChange={(e) => setClearOnPresetChange(e.target.checked)}
+              />
+              <span>Clear canvas on preset change</span>
+            </label>
+          </div>
+        )}
+
+        {/* Speed Slider */}
+        <div className="control-section speed-control">
+            <div className="speed-header">
+                <span className="speed-label">Simulation Speed</span>
+                <span className="speed-value">~{formatRate(currentRate)} pts/s</span>
+            </div>
+            <input 
+                type="range" 
+                min="1" 
+                max="100" 
+                value={speed}
+                onChange={(e) => onSpeedChange(parseInt(e.target.value))}
+                className="speed-range"
+            />
+            <div className="speed-range-labels">
+                <span>{formatRate(minRate)}</span>
+                <span>{formatRate(maxRate)}</span>
             </div>
         </div>
 
-        {/* Display Settings (Colors) - Label Removed */}
-        <div className="control-section color-settings">
-            {renderMode === 'histogram' ? (
-                <>
-                    <div className="color-setting-row">
-                        <label className="color-label">Low Density</label>
-                        <input 
-                            type="color" 
-                            value={histogramColors.low}
-                            onChange={(e) => onHistogramColorsChange({ ...histogramColors, low: e.target.value })}
-                            className="color-input"
-                        />
-                    </div>
-                    <div className="color-setting-row">
-                        <label className="color-label">Mid Density</label>
-                        <input 
-                            type="color" 
-                            value={histogramColors.mid}
-                            onChange={(e) => onHistogramColorsChange({ ...histogramColors, mid: e.target.value })}
-                            className="color-input"
-                        />
-                    </div>
-                    <div className="color-setting-row">
-                        <label className="color-label">High Density</label>
-                        <input 
-                            type="color" 
-                            value={histogramColors.high}
-                            onChange={(e) => onHistogramColorsChange({ ...histogramColors, high: e.target.value })}
-                            className="color-input"
-                        />
-                    </div>
-                </>
-            ) : (
-                <div className="color-setting-row">
-                    <label className="color-label">Dot Color</label>
-                    <input 
-                        type="color" 
-                        value={color}
-                        onChange={(e) => onColorChange(e.target.value)}
-                        className="color-input"
-                    />
-                </div>
-            )}
-        </div>
-
-        {/* Render Mode Toggle - Label Removed - Moved Here */}
+        {/* Render Mode Toggle */}
         <div className="control-section render-mode-toggle">
             <button 
                 onClick={() => onRenderModeChange('chalk')}
@@ -251,28 +289,56 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             </button>
         </div>
 
-        {/* Speed Slider */}
-        <div className="control-section speed-control">
-            <div className="speed-header">
-                <span className="speed-label">Simulation Speed</span>
-                <span className="speed-value">~{formatRate(currentRate)} pts/s</span>
-            </div>
-            <input 
-                type="range" 
-                min="1" 
-                max="100" 
-                value={speed}
-                onChange={(e) => onSpeedChange(parseInt(e.target.value))}
-                className="speed-range"
-            />
-            <div className="speed-range-labels">
-                <span>{formatRate(minRate)}</span>
-                <span>{formatRate(maxRate)}</span>
-            </div>
+        {/* Display Settings (Colors) - Label Removed */}
+        <div className="control-section color-settings">
+            {renderMode === 'histogram' ? (
+                <div className="density-mapping-row">
+                    <span className="density-mapping-title">DENSITY MAPPING</span>
+                    <div className="density-color-inputs">
+                        <div className="density-color-item">
+                            <label className="color-label">Low</label>
+                            <input 
+                                type="color" 
+                                value={histogramColors.low}
+                                onChange={(e) => onHistogramColorsChange({ ...histogramColors, low: e.target.value })}
+                                className="color-input"
+                            />
+                        </div>
+                        <div className="density-color-item">
+                            <label className="color-label">Mid</label>
+                            <input 
+                                type="color" 
+                                value={histogramColors.mid}
+                                onChange={(e) => onHistogramColorsChange({ ...histogramColors, mid: e.target.value })}
+                                className="color-input"
+                            />
+                        </div>
+                        <div className="density-color-item">
+                            <label className="color-label">High</label>
+                            <input 
+                                type="color" 
+                                value={histogramColors.high}
+                                onChange={(e) => onHistogramColorsChange({ ...histogramColors, high: e.target.value })}
+                                className="color-input"
+                            />
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <div className="color-setting-row">
+                    <label className="color-label">Dot Color</label>
+                    <input 
+                        type="color" 
+                        value={color}
+                        onChange={(e) => onColorChange(e.target.value)}
+                        className="color-input"
+                    />
+                </div>
+            )}
         </div>
 
         {/* Parameters */}
-        <div className="parameters-section">
+        <div className="control-section parameters-section">
             <div className="parameters-header">
                 <h3 className="parameters-title">Parameters</h3>
                 <button 
@@ -281,6 +347,21 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                 >
                     Reset Defaults
                 </button>
+            </div>
+            
+            <div className="number-inputs-grid">
+                <NumberInput 
+                    label="Degree (n)" 
+                    value={params.n} 
+                    step={1}
+                    onChange={(v) => onParamChange({ n: Math.max(1, Math.floor(v)) })} 
+                />
+                <NumberInput 
+                    label="Scale" 
+                    value={params.scale} 
+                    step={0.01}
+                    onChange={(v) => onParamChange({ scale: Math.max(0.01, v) })} 
+                />
             </div>
             
             <SliderInput 
@@ -313,80 +394,34 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                 min={-1} max={1} step={0.001} 
                 onChange={(v) => onParamChange({ omega: v })} 
             />
-            
-            <div className="number-inputs-grid">
-                <NumberInput 
-                    label="Degree (n)" 
-                    value={params.n} 
-                    step={1}
-                    onChange={(v) => onParamChange({ n: Math.max(1, Math.floor(v)) })} 
-                />
-                <NumberInput 
-                    label="Scale" 
-                    value={params.scale} 
-                    step={0.01}
-                    onChange={(v) => onParamChange({ scale: Math.max(0.01, v) })} 
-                />
-            </div>
         </div>
 
-        {/* Saved Presets */}
-        <div className="presets-section">
-            <div className="presets-buttons">
+        {/* Main Controls */}
+        <div className="control-section">
+            <div className="control-buttons-row">
                 <button 
-                    onClick={onSavePreset}
-                    className="preset-button preset-button-save"
+                    onClick={() => setIsRunning(!isRunning)}
+                    className={`control-button ${
+                        isRunning 
+                        ? 'control-button-pause' 
+                        : 'control-button-resume'
+                    }`}
                 >
-                    + Save
+                    {isRunning ? 'Pause' : 'Resume'}
                 </button>
-                <label className="preset-button preset-button-load">
-                    Load JSON
-                    <input 
-                        type="file" 
-                        accept=".json" 
-                        onChange={onImportPresets}
-                        className="preset-file-input" 
-                    />
-                </label>
                 <button 
-                    onClick={onDownloadPresets}
-                    disabled={savedPresets.length === 0}
-                    className="preset-button preset-button-download"
+                    onClick={onRestart}
+                    className="control-button control-button-restart"
                 >
-                    Download
+                    Restart
+                </button>
+                <button 
+                    onClick={onClear}
+                    className="control-button control-button-clear"
+                >
+                    Clear
                 </button>
             </div>
-
-            {savedPresets.length > 0 ? (
-                <div className="presets-list custom-scrollbar">
-                    {savedPresets.map((preset) => (
-                        <div key={preset.id} className="preset-item">
-                            <button 
-                                onClick={() => onLoadPreset(preset)}
-                                className="preset-item-button"
-                            >
-                                <div className="preset-item-name">{preset.name}</div>
-                                <div className="preset-item-params">
-                                    λ:{preset.params.lambda.toFixed(1)} n:{preset.params.n}
-                                </div>
-                            </button>
-                            <button 
-                                onClick={() => onRemovePreset(preset.id)}
-                                className="preset-remove-button"
-                                title="Remove"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
-                    ))}
-                </div>
-            ) : (
-                <div className="preset-empty">
-                    No saved presets yet.
-                </div>
-            )}
         </div>
     </div>
   );

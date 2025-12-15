@@ -1,9 +1,10 @@
 .symmetry-attractor-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
-  overflow: hidden;
+  overflow-y: auto; /* Allow scrolling on mobile */
+  overflow-x: hidden;
   background-color: #0f172a; /* slate-900 */
   color: #e2e8f0; /* slate-200 */
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
@@ -12,6 +13,8 @@
 @media (min-width: 768px) {
   .symmetry-attractor-container {
     flex-direction: row;
+    height: 100vh; /* Fixed height on desktop */
+    overflow: hidden; /* No scrolling on desktop */
   }
 }
 
@@ -22,11 +25,15 @@
   background-color: rgba(30, 41, 59, 0.5); /* slate-800/50 */
   padding: 1rem;
   overflow-y: auto;
+  order: 2; /* On mobile, controls appear below canvas */
+  padding-top: calc(100vw + 1rem); /* Start below fixed canvas (100vw = square canvas height) */
 }
 
 @media (min-width: 768px) {
   .symmetry-attractor-sidebar {
     width: 20rem; /* w-80 */
+    order: 1; /* On desktop, controls appear first (left) */
+    padding-top: 1rem; /* Normal padding on desktop */
   }
 }
 
@@ -38,6 +45,25 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  order: 1; /* On mobile, canvas appears first (top) */
+  position: fixed; /* Fixed at top on mobile - stays visible while scrolling */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  width: 100%;
+  aspect-ratio: 1; /* Make canvas square on mobile */
+  flex-shrink: 0;
+  height: 100vw; /* Explicit height for square canvas on mobile */
+}
+
+@media (min-width: 768px) {
+  .symmetry-attractor-canvas-area {
+    order: 2; /* On desktop, canvas appears second (right) */
+    position: relative; /* Not sticky on desktop */
+    aspect-ratio: auto; /* Allow full height on desktop */
+    height: auto; /* Full height on desktop */
+  }
 }
 
 .symmetry-attractor-overlay {
