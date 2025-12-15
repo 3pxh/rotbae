@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { SimulationCanvas } from './SimulationCanvas';
 import { ControlPanel } from './ControlPanel';
 import { DEFAULT_PARAMS } from './types';
@@ -21,6 +21,7 @@ export const SymmetryAttractor: React.FC = () => {
   });
   const [renderMode, setRenderMode] = useState<'chalk' | 'glow' | 'histogram'>('chalk');
   const [speed, setSpeed] = useState<number>(50); // 1-100
+  const resetWithoutClearRef = useRef<boolean>(false);
 
   const handleParamChange = useCallback((newParams: Partial<SimulationParams>) => {
     setParams(prev => ({ ...prev, ...newParams }));
@@ -58,10 +59,16 @@ export const SymmetryAttractor: React.FC = () => {
     setSavedPresets(prev => [...prev, newPreset]);
   }, [params, savedPresets.length]);
 
-  const handleLoadPreset = useCallback((preset: SavedPreset) => {
+  const handleLoadPreset = useCallback((preset: SavedPreset, clearCanvas: boolean = true) => {
     setParams(preset.params);
-    // Optionally restart iteration on load to see clear pattern
-    setResetTrigger(prev => prev + 1); 
+    // Set resetWithoutClear flag in ref synchronously (before reset trigger)
+    resetWithoutClearRef.current = !clearCanvas;
+    // Reset state so simulation starts fresh with new params
+    setResetTrigger(prev => prev + 1);
+    // Reset the flag after reset has been processed
+    setTimeout(() => {
+      resetWithoutClearRef.current = false;
+    }, 0);
   }, []);
 
   const handleRemovePreset = useCallback((id: string) => {
@@ -178,14 +185,8 @@ export const SymmetryAttractor: React.FC = () => {
           renderMode={renderMode}
           histogramColors={histogramColors}
           speed={speed}
+          resetWithoutClearRef={resetWithoutClearRef}
         />
-        
-        {/* Overlay Info */}
-        <div className="symmetry-attractor-overlay">
-           <p>x<sub>new</sub> = p·x + γ·Re(z<sup>n-1</sup>) - ω·y</p>
-           <p>y<sub>new</sub> = p·y - γ·Im(z<sup>n-1</sup>) + ω·x</p>
-           <p>p = λ + α|z|² + β·Re(z<sup>n</sup>)</p>
-        </div>
       </div>
     </div>
   );

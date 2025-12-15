@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useLayoutEffect } from 'react';
 import type { SimulationParams } from './types';
 import './SimulationCanvas.css';
 
@@ -12,6 +12,7 @@ interface SimulationCanvasProps {
   renderMode: 'chalk' | 'glow' | 'histogram';
   histogramColors: { low: string; mid: string; high: string };
   speed: number;
+  resetWithoutClearRef: React.MutableRefObject<boolean>;
 }
 
 // Helper to convert hex to {r,g,b}
@@ -38,7 +39,8 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({
   color,
   renderMode,
   histogramColors,
-  speed
+  speed,
+  resetWithoutClearRef
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -51,6 +53,7 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({
   const renderModeRef = useRef<'chalk' | 'glow' | 'histogram'>(renderMode);
   const histogramColorsRef = useRef(histogramColors);
   const speedRef = useRef(speed);
+  const frameCounterRef = useRef<number>(0);
 
   // Histogram Data
   const histogramRef = useRef<Uint32Array | null>(null);
@@ -98,23 +101,31 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({
   // Handle Reset (Positions & Histogram Data)
   useEffect(() => {
     stateRef.current = { x: 0.01, y: 0.003, iterations: 0 };
-    
-    // Clear Histogram buffer
-    if (histogramRef.current) {
+
+    // Reset frame counter for consistent speed behavior
+    frameCounterRef.current = 0;
+
+    // Clear canvas and histogram buffer on reset (unless resetWithoutClearRef.current is true)
+    // Read directly from the ref passed from parent (synchronous access)
+    // For histogram mode, clearing the histogram buffer is effectively clearing the canvas
+    if (!resetWithoutClearRef.current) {
+      // Clear Histogram buffer (important for histogram mode)
+      if (histogramRef.current) {
         histogramRef.current.fill(0);
         maxHitsRef.current = 0;
-    }
+      }
 
-    // Also clear canvas on reset
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        const prevComposite = ctx.globalCompositeOperation;
-        ctx.globalCompositeOperation = 'source-over';
-        ctx.fillStyle = 'black';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.globalCompositeOperation = prevComposite;
+      // Clear canvas (for all modes: chalk, glow, histogram)
+      const canvas = canvasRef.current;
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          const prevComposite = ctx.globalCompositeOperation;
+          ctx.globalCompositeOperation = 'source-over';
+          ctx.fillStyle = 'black';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.globalCompositeOperation = prevComposite;
+        }
       }
     }
   }, [resetTrigger]);
@@ -201,27 +212,43 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({
       const speedVal = speedRef.current; // 1-100
 
       // Calculate BATCH_SIZE based on speed and mode
-      // Speed 1 = ~0.1M/sec = ~1666/frame
+      // Speed 1 = 1 dot per second = 1/60 dots per frame (at 60fps)
       // Speed 100 = ~10M/sec for Histogram = ~166,666/frame
       //           = ~0.3M/sec for Chalk = ~5000/frame
       
       let BATCH_SIZE;
+      const FPS = 60; // Approximate frames per second
       
-      if (currentMode === 'histogram') {
-          // Logarithmic scaling for huge range
-          // t goes 0 to 1
-          const t = (speedVal - 1) / 99;
-          const min = 1666;
-          const max = 250000;
-          // Use exponential feel: min * (max/min)^t
-          BATCH_SIZE = Math.floor(min * Math.pow(max/min, t));
+      if (speedVal === 1) {
+          // At minimum speed, process 1 point every 60 frames = 1 point per second
+          frameCounterRef.current++;
+          if (frameCounterRef.current < FPS) {
+              BATCH_SIZE = 0; // Skip this frame
+          } else {
+              BATCH_SIZE = 1; // Process 1 point
+              frameCounterRef.current = 0; // Reset counter
+          }
       } else {
-          // Chalk/Glow Mode
-          // Linear or gentle curve
-          const t = (speedVal - 1) / 99;
-          const min = 100; // Start really slow for Chalk to show movement
-          const max = 3000; // Cap at performant level for fillRect
-          BATCH_SIZE = Math.floor(min + (max - min) * t);
+          // Reset frame counter for speeds > 1
+          frameCounterRef.current = 0;
+          
+          if (currentMode === 'histogram') {
+              // Logarithmic scaling for huge range
+              // t goes 0 to 1 (but speedVal is now 2-100, so t = (speedVal - 2) / 98)
+              const t = (speedVal - 2) / 98;
+              const min = 1666; // Speed 2 = ~0.1M/sec
+              const max = 250000; // Speed 100 = ~10M/sec
+              // Use exponential feel: min * (max/min)^t
+              BATCH_SIZE = Math.floor(min * Math.pow(max/min, t));
+          } else {
+              // Chalk/Glow Mode
+              // Linear or gentle curve
+              // t goes 0 to 1 (but speedVal is now 2-100, so t = (speedVal - 2) / 98)
+              const t = (speedVal - 2) / 98;
+              const min = 100; // Speed 2 = ~6k/sec
+              const max = 3000; // Speed 100 = ~0.3M/sec
+              BATCH_SIZE = Math.floor(min + (max - min) * t);
+          }
       }
 
       const width = canvas.width; // Actual pixels
@@ -403,15 +430,6 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({
   return (
     <div ref={containerRef} className="canvas-container">
        <canvas ref={canvasRef} />
-       
-       {/* Stats Overlay */}
-       <div className="canvas-stats">
-          <div>Mode: {renderMode === 'histogram' ? 'Density Histogram' : (renderMode === 'glow' ? 'Glow (Accumulation)' : 'Chalk')}</div>
-          <div>Iterates: {stats.iterations.toLocaleString()}</div>
-          <div>Max Hits: {renderMode === 'histogram' ? maxHitsRef.current.toLocaleString() : 'N/A'}</div>
-          <div>X: {stats.x.toFixed(6)}</div>
-          <div>Y: {stats.y.toFixed(6)}</div>
-       </div>
     </div>
   );
 };
