@@ -139,6 +139,8 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   // Update current preset index when presets change
   useEffect(() => {
     if (savedPresets.length > 0 && currentPresetIndex >= savedPresets.length) {
+      // Adjust index when presets array shrinks - acceptable use of setState in effect
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCurrentPresetIndex(Math.max(0, savedPresets.length - 1));
     }
   }, [savedPresets.length, currentPresetIndex]);
@@ -186,53 +188,53 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         {savedPresets.length > 0 && (
           <div className="control-section presets-navigation">
             <div className="presets-nav-container" ref={dropdownRef}>
-              <button 
+            <button 
                 onClick={handlePrevPreset}
                 className="preset-nav-button preset-nav-prev"
                 aria-label="Previous preset"
-              >
+            >
                 &lt;
-              </button>
-              <button
+            </button>
+                <button 
                 onClick={() => setShowDropdown(!showDropdown)}
                 className="preset-nav-current"
-              >
+                >
                 {currentPreset?.name || 'No Preset'}
-              </button>
-              <button 
+                </button>
+                <button 
                 onClick={handleNextPreset}
                 className="preset-nav-button preset-nav-next"
                 aria-label="Next preset"
-              >
+                >
                 &gt;
-              </button>
+                </button>
               
               {showDropdown && (
                 <div className="presets-dropdown custom-scrollbar">
                   {savedPresets.map((preset, index) => (
-                    <button
+                <button 
                       key={preset.id}
                       onClick={() => handlePresetClick(preset, index)}
                       className={`preset-dropdown-item ${index === currentPresetIndex ? 'preset-dropdown-item-active' : ''}`}
-                    >
+                >
                       <div className="preset-dropdown-name">{preset.name}</div>
                       <div className="preset-dropdown-params">
                         λ:{preset.params.lambda.toFixed(1)} n:{preset.params.n}
                       </div>
-                    </button>
+                </button>
                   ))}
                 </div>
               )}
             </div>
             <label className="preset-clear-checkbox">
-              <input
+                        <input 
                 type="checkbox"
                 checked={clearOnPresetChange}
                 onChange={(e) => setClearOnPresetChange(e.target.checked)}
               />
               <span>Clear canvas on preset change</span>
             </label>
-          </div>
+                    </div>
         )}
 
         {/* Speed Slider */}
@@ -240,19 +242,19 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             <div className="speed-header">
                 <span className="speed-label">Simulation Speed</span>
                 <span className="speed-value">~{formatRate(currentRate)} pts/s</span>
-            </div>
-            <input 
+                    </div>
+                        <input 
                 type="range" 
                 min="1" 
                 max="100" 
                 value={speed}
                 onChange={(e) => onSpeedChange(parseInt(e.target.value))}
                 className="speed-range"
-            />
+                        />
             <div className="speed-range-labels">
                 <span>{formatRate(minRate)}</span>
                 <span>{formatRate(maxRate)}</span>
-            </div>
+                </div>
         </div>
 
         {/* Render Mode Toggle */}
@@ -323,17 +325,17 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                             />
                         </div>
                     </div>
-                </div>
+            </div>
             ) : (
                 <div className="color-setting-row">
                     <label className="color-label">Dot Color</label>
-                    <input 
+            <input 
                         type="color" 
                         value={color}
                         onChange={(e) => onColorChange(e.target.value)}
                         className="color-input"
-                    />
-                </div>
+            />
+            </div>
             )}
         </div>
 
@@ -415,13 +417,13 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                 >
                     Restart
                 </button>
-                <button 
+                            <button 
                     onClick={onClear}
                     className="control-button control-button-clear"
-                >
+                            >
                     Clear
-                </button>
-            </div>
+                            </button>
+                        </div>
         </div>
     </div>
   );

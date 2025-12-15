@@ -103,3 +103,44 @@
   background: rgba(71, 85, 105, 0.9);
 }
 
+/* Download Button Styles */
+.download-button-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.download-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 4px;
+  background-color: black;
+  color: white;
+  border: none;
+  font-size: 2.4rem;
+  cursor: pointer;
+  z-index: 100;
+  opacity: 0.25;
+  transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  line-height: 1;
+  margin: 0.5rem;
+  padding: 0;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.download-button:hover {
+  transform: scale(1.1);
+  background-color: black;
+}
+
+.download-button-visible {
+  opacity: 1;
+}
+

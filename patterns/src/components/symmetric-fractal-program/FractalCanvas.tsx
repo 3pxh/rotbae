@@ -254,7 +254,7 @@ export const FractalCanvas: React.FC<FractalCanvasProps> = ({
     }
     
     requestRef.current = requestAnimationFrame(animate);
-  }, [setPointCount, params.conj, renderMode]);
+  }, [setPointCount, params.conj]);
 
   useEffect(() => {
     requestRef.current = requestAnimationFrame(animate);
