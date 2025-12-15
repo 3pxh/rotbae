@@ -59,6 +59,7 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({
   const canvasSizeRef = useRef<{w: number, h: number}>({w: 0, h: 0});
 
   // Stats (currently unused but kept for potential future use)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_stats, setStats] = useState({ x: 0, y: 0, iterations: 0 });
 
   // Update params ref when props change
@@ -112,6 +113,8 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({
         }
       }
     }
+    // resetWithoutClearRef is a ref and doesn't need to be in dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resetTrigger]);
 
   // Handle Clear (Screen only)

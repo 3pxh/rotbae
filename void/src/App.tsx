@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import './App.css'
 import { supabase } from './lib/supabase'
 
@@ -192,7 +192,7 @@ function App() {
         setIsLoading(false)
       }
     }
-  }, [pixels, isLoading])
+  }, [pixels, isLoading, drawCanvas])
 
   // Animate processing arrows for payment processing (original speed)
   useEffect(() => {
@@ -269,7 +269,7 @@ function App() {
   }
 
 
-  const drawCanvas = () => {
+  const drawCanvas = useCallback(() => {
     const canvas = canvasRef.current
     if (!canvas) return
 
@@ -285,7 +285,7 @@ function App() {
       ctx.fillStyle = pixel.color === 'white' ? '#ffffff' : '#000000'
       ctx.fillRect(pixel.x, pixel.y, 1, 1)
     })
-  }
+  }, [pixels])
 
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current
@@ -390,7 +390,7 @@ function App() {
 
       // Redirect to Stripe Checkout using direct URL (redirectToCheckout is deprecated)
       window.location.href = checkoutUrl
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error processing payment:', error)
       console.error('Error type:', error?.constructor?.name)
       console.error('Error stack:', error?.stack)
@@ -417,7 +417,7 @@ function App() {
           if (body?.error || body?.details) {
             errorMessage = body.details || body.error || errorMessage
           }
-        } catch (e) {
+        } catch {
           // Ignore JSON parse errors
         }
       }

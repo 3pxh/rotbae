@@ -133,3 +133,43 @@ To add a new project (e.g., `admin` for `admin.rotbae.com`):
    - **Note**: You can also access it via `rotbae.com/admin/` without adding the domain alias
 
 That's it! The new subdomain will be automatically built and deployed with the next push. The Edge Function will handle routing based on the Host header, and assets will load correctly from the project's folder path.
+
+## Pre-commit Hooks
+
+This repository includes a pre-commit hook that automatically runs linting for all projects before allowing a commit. This helps maintain code quality across the monorepo.
+
+### How It Works
+
+When you run `git commit`, the pre-commit hook (`.git/hooks/pre-commit`) will:
+
+1. **Run lint for all projects**: Automatically lints `testCanvas`, `patterns`, `void`, `home`, `drops`, and `stream`
+2. **Show progress**: Displays which project is being linted
+3. **Block commits on failure**: Prevents commits if any project fails linting
+4. **Show summary**: Displays which projects passed or failed
+
+### Adding Lint to a New Project
+
+If you add a new project and want it included in the pre-commit hook:
+
+1. **Add a lint script** to your project's `package.json`:
+   ```json
+   {
+     "scripts": {
+       "lint": "eslint ."
+     }
+   }
+   ```
+
+2. **Update the pre-commit hook** (`.git/hooks/pre-commit`) to include your project:
+   ```bash
+   PROJECTS="testCanvas patterns void home drops stream your-new-project"
+   ```
+
+### Bypassing the Hook (Not Recommended)
+
+If you need to bypass the pre-commit hook for a specific commit (e.g., during debugging), you can use:
+```bash
+git commit --no-verify
+```
+
+**Note**: Only use this when absolutely necessary, as it bypasses code quality checks.

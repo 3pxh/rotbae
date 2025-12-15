@@ -139,6 +139,8 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   // Update current preset index when presets change
   useEffect(() => {
     if (savedPresets.length > 0 && currentPresetIndex >= savedPresets.length) {
+      // Adjust index when presets array shrinks - acceptable use of setState in effect
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCurrentPresetIndex(Math.max(0, savedPresets.length - 1));
     }
   }, [savedPresets.length, currentPresetIndex]);

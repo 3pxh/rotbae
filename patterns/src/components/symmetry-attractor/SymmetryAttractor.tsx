@@ -60,7 +60,7 @@ export const SymmetryAttractor: React.FC = () => {
   useEffect(() => {
     try {
       if (Array.isArray(presetsData)) {
-        const validPresets = presetsData.filter((p: any): p is SavedPreset => 
+        const validPresets = presetsData.filter((p: unknown): p is SavedPreset => 
           p && 
           typeof p === 'object' && 
           typeof p.id === 'string' &&
@@ -76,6 +76,8 @@ export const SymmetryAttractor: React.FC = () => {
           typeof p.params.scale === 'number'
         );
         if (validPresets.length > 0) {
+          // Initialize state from external data (JSON file) - acceptable use of setState in effect
+          // eslint-disable-next-line react-hooks/set-state-in-effect
           setSavedPresets(validPresets);
           // Optionally load the first preset
           // setParams(validPresets[0].params);

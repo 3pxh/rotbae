@@ -44,7 +44,7 @@ export const SymmetricFractalProgram: React.FC = () => {
     downloadAnchorNode.remove();
   }, [params]);
 
-  const validatePreset = (obj: any): obj is Preset => {
+  const validatePreset = (obj: unknown): obj is Preset => {
     return obj && typeof obj === 'object' && 
            typeof obj.a11 === 'number' && typeof obj.a12 === 'number' &&
            typeof obj.a21 === 'number' && typeof obj.a22 === 'number' &&
@@ -115,6 +115,8 @@ export const SymmetricFractalProgram: React.FC = () => {
       const presets = Array.isArray(presetsData) ? presetsData : [presetsData];
       const validPresets = presets.filter(validatePreset);
       if (validPresets.length > 0) {
+        // Initialize state from external data (JSON file) - acceptable use of setState in effect
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setLoadedPresets(validPresets);
         // Load the first preset automatically
         setParams(validPresets[0]);

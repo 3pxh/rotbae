@@ -11,6 +11,7 @@ interface CanvasProps {
 export const SquareQuiltCanvas: React.FC<CanvasProps> = ({ params, isRunning, clearTrigger }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const requestRef = useRef<number | undefined>(undefined);
+  const drawRef = useRef<() => void>();
   
   // Simulation state
   const stateRef = useRef({
@@ -73,8 +74,8 @@ export const SquareQuiltCanvas: React.FC<CanvasProps> = ({ params, isRunning, cl
 
       // Wrap Logic (Unit Square [0, 1])
       // IF xnew > 1 THEN xnew = xnew - INT(xnew) ...
-      let xnew = xnew_val - Math.floor(xnew_val);
-      let ynew = ynew_val - Math.floor(ynew_val);
+      const xnew = xnew_val - Math.floor(xnew_val);
+      const ynew = ynew_val - Math.floor(ynew_val);
 
       // Update state for next iteration
       x = xnew;
@@ -107,9 +108,14 @@ export const SquareQuiltCanvas: React.FC<CanvasProps> = ({ params, isRunning, cl
     stateRef.current.iterates += speed;
 
     if (isRunning) {
-      requestRef.current = requestAnimationFrame(draw);
+      requestRef.current = requestAnimationFrame(drawRef.current!);
     }
   }, [isRunning, params]);
+
+  // Update draw ref when draw function changes
+  useEffect(() => {
+    drawRef.current = draw;
+  }, [draw]);
 
   // Handle Resize and Clear
   useEffect(() => {
@@ -148,13 +154,13 @@ export const SquareQuiltCanvas: React.FC<CanvasProps> = ({ params, isRunning, cl
 
   // Animation Loop Management
   useEffect(() => {
-    if (isRunning) {
-      requestRef.current = requestAnimationFrame(draw);
+    if (isRunning && drawRef.current) {
+      requestRef.current = requestAnimationFrame(drawRef.current);
     }
     return () => {
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
-  }, [isRunning, draw]);
+  }, [isRunning]);
 
   return (
     <canvas 
