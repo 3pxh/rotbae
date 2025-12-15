@@ -183,6 +183,24 @@ function App() {
     }
   }, [editX, editY, isModalOpen, selectedPixel])
 
+  const drawCanvas = useCallback(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    // Clear canvas
+    ctx.fillStyle = '#000000'
+    ctx.fillRect(0, 0, 1024, 1024)
+
+    // Draw pixels
+    pixels.forEach((pixel) => {
+      ctx.fillStyle = pixel.color === 'white' ? '#ffffff' : '#000000'
+      ctx.fillRect(pixel.x, pixel.y, 1, 1)
+    })
+  }, [pixels])
+
   // Draw canvas when pixels change
   useEffect(() => {
     if (pixels.size > 0) {
@@ -267,25 +285,6 @@ function App() {
       // Don't set isLoading to false here - let the drawCanvas useEffect handle it
     }
   }
-
-
-  const drawCanvas = useCallback(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    // Clear canvas
-    ctx.fillStyle = '#000000'
-    ctx.fillRect(0, 0, 1024, 1024)
-
-    // Draw pixels
-    pixels.forEach((pixel) => {
-      ctx.fillStyle = pixel.color === 'white' ? '#ffffff' : '#000000'
-      ctx.fillRect(pixel.x, pixel.y, 1, 1)
-    })
-  }, [pixels])
 
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current
@@ -392,30 +391,65 @@ function App() {
       window.location.href = checkoutUrl
     } catch (error: unknown) {
       console.error('Error processing payment:', error)
-      console.error('Error type:', error?.constructor?.name)
-      console.error('Error stack:', error?.stack)
+      
+      // Type guard for Error objects
+      const isError = (e: unknown): e is Error => {
+        return e instanceof Error
+      }
+      
+      // Type guard for objects with message property
+      const hasMessage = (e: unknown): e is { message: string } => {
+        if (typeof e !== 'object' || e === null) return false
+        return 'message' in e && typeof (e as Record<string, unknown>).message === 'string'
+      }
+      
+      // Type guard for objects with error property
+      const hasError = (e: unknown): e is { error: { message: string } } => {
+        if (typeof e !== 'object' || e === null) return false
+        const err = e as Record<string, unknown>
+        if (!('error' in err) || typeof err.error !== 'object' || err.error === null) return false
+        const errorObj = err.error as Record<string, unknown>
+        return 'message' in errorObj && typeof errorObj.message === 'string'
+      }
+      
+      // Type guard for objects with context property
+      const hasContext = (e: unknown): e is { context: { message?: string; body?: unknown } } => {
+        if (typeof e !== 'object' || e === null) return false
+        const err = e as Record<string, unknown>
+        return 'context' in err && typeof err.context === 'object' && err.context !== null
+      }
+      
+      console.error('Error type:', isError(error) ? error.constructor?.name : typeof error)
+      if (isError(error)) {
+        console.error('Error stack:', error.stack)
+      }
       
       // Try to extract error message from various possible locations
       let errorMessage = 'Failed to process payment. Please try again.'
       
-      if (error?.message) {
+      if (isError(error)) {
         errorMessage = error.message
-      } else if (error?.error?.message) {
+      } else if (hasMessage(error)) {
+        errorMessage = error.message
+      } else if (hasError(error)) {
         errorMessage = error.error.message
-      } else if (error?.context?.message) {
+      } else if (hasContext(error) && error.context.message) {
         errorMessage = error.context.message
       } else if (typeof error === 'string') {
         errorMessage = error
       }
       
       // If it's a FunctionsHttpError, try to get the response body
-      if (error?.context?.body) {
+      if (hasContext(error) && error.context.body) {
         try {
           const body = typeof error.context.body === 'string' 
             ? JSON.parse(error.context.body) 
             : error.context.body
-          if (body?.error || body?.details) {
-            errorMessage = body.details || body.error || errorMessage
+          if (typeof body === 'object' && body !== null && ('error' in body || 'details' in body)) {
+            const bodyObj = body as { error?: string; details?: string }
+            if (bodyObj.details || bodyObj.error) {
+              errorMessage = bodyObj.details || bodyObj.error || errorMessage
+            }
           }
         } catch {
           // Ignore JSON parse errors

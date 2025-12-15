@@ -95,7 +95,7 @@ export const SimulationCanvas = forwardRef<SimulationCanvasRef, SimulationCanvas
   // Handle Reset (Positions & Histogram Data)
   useEffect(() => {
     stateRef.current = { x: 0.01, y: 0.003, iterations: 0 };
-
+    
     // Reset frame counter for consistent speed behavior
     frameCounterRef.current = 0;
 
@@ -104,23 +104,23 @@ export const SimulationCanvas = forwardRef<SimulationCanvasRef, SimulationCanvas
     // For histogram mode, clearing the histogram buffer is effectively clearing the canvas
     if (!resetWithoutClearRef.current) {
       // Clear Histogram buffer (important for histogram mode)
-      if (histogramRef.current) {
+    if (histogramRef.current) {
         histogramRef.current.fill(0);
         maxHitsRef.current = 0;
-      }
+    }
 
       // Clear canvas (for all modes: chalk, glow, histogram)
-      const canvas = canvasRef.current;
-      if (canvas) {
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-          const prevComposite = ctx.globalCompositeOperation;
-          ctx.globalCompositeOperation = 'source-over';
-          ctx.fillStyle = 'black';
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.globalCompositeOperation = prevComposite;
-        }
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        const prevComposite = ctx.globalCompositeOperation;
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.globalCompositeOperation = prevComposite;
       }
+    }
     }
     // resetWithoutClearRef is a ref and doesn't need to be in dependencies
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -227,23 +227,23 @@ export const SimulationCanvas = forwardRef<SimulationCanvasRef, SimulationCanvas
       } else {
           // Reset frame counter for speeds > 1
           frameCounterRef.current = 0;
-          
-          if (currentMode === 'histogram') {
-              // Logarithmic scaling for huge range
+      
+      if (currentMode === 'histogram') {
+          // Logarithmic scaling for huge range
               // t goes 0 to 1 (but speedVal is now 2-100, so t = (speedVal - 2) / 98)
               const t = (speedVal - 2) / 98;
               const min = 1666; // Speed 2 = ~0.1M/sec
               const max = 250000; // Speed 100 = ~10M/sec
-              // Use exponential feel: min * (max/min)^t
-              BATCH_SIZE = Math.floor(min * Math.pow(max/min, t));
-          } else {
-              // Chalk/Glow Mode
-              // Linear or gentle curve
+          // Use exponential feel: min * (max/min)^t
+          BATCH_SIZE = Math.floor(min * Math.pow(max/min, t));
+      } else {
+          // Chalk/Glow Mode
+          // Linear or gentle curve
               // t goes 0 to 1 (but speedVal is now 2-100, so t = (speedVal - 2) / 98)
               const t = (speedVal - 2) / 98;
               const min = 100; // Speed 2 = ~6k/sec
               const max = 3000; // Speed 100 = ~0.3M/sec
-              BATCH_SIZE = Math.floor(min + (max - min) * t);
+          BATCH_SIZE = Math.floor(min + (max - min) * t);
           }
       }
 

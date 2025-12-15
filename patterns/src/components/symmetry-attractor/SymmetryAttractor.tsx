@@ -69,7 +69,7 @@ const SymmetryAttractor = forwardRef<DownloadableComponentRef>((_props, ref) => 
     // Set resetWithoutClear flag in ref synchronously (before reset trigger)
     resetWithoutClearRef.current = !clearCanvas;
     // Reset state so simulation starts fresh with new params
-    setResetTrigger(prev => prev + 1);
+    setResetTrigger(prev => prev + 1); 
     // Reset the flag after reset has been processed
     setTimeout(() => {
       resetWithoutClearRef.current = false;
@@ -96,7 +96,7 @@ const SymmetryAttractor = forwardRef<DownloadableComponentRef>((_props, ref) => 
             typeof params.omega === 'number' &&
             typeof params.n === 'number' &&
             typeof params.scale === 'number'
-          );
+        );
         });
         if (validPresets.length > 0) {
           // Initialize state from external data (JSON file) - acceptable use of setState in effect
