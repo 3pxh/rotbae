@@ -11,7 +11,7 @@ interface CanvasProps {
 export const SquareQuiltCanvas: React.FC<CanvasProps> = ({ params, isRunning, clearTrigger }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const requestRef = useRef<number | undefined>(undefined);
-  const drawRef = useRef<() => void>();
+  const drawRef = useRef<(() => void) | undefined>(undefined);
   
   // Simulation state
   const stateRef = useRef({

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import type { SimulationParams } from './types';
 import './SimulationCanvas.css';
 
@@ -12,6 +12,10 @@ interface SimulationCanvasProps {
   histogramColors: { low: string; mid: string; high: string };
   speed: number;
   resetWithoutClearRef: React.MutableRefObject<boolean>;
+}
+
+export interface SimulationCanvasRef {
+  getCanvasElement: () => HTMLCanvasElement | null;
 }
 
 // Helper to convert hex to {r,g,b}
@@ -29,7 +33,7 @@ const lerp = (start: number, end: number, t: number) => {
     return start * (1 - t) + end * t;
 };
 
-export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ 
+export const SimulationCanvas = forwardRef<SimulationCanvasRef, SimulationCanvasProps>(({ 
   params, 
   isRunning, 
   resetTrigger,
@@ -39,9 +43,14 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({
   histogramColors,
   speed,
   resetWithoutClearRef
-}) => {
+}, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Expose canvas ref to parent
+  useImperativeHandle(ref, () => ({
+    getCanvasElement: () => canvasRef.current
+  }));
   
   // Refs for simulation state to avoid closure staleness in animation loop
   const paramsRef = useRef<SimulationParams>(params);
@@ -419,5 +428,7 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({
        <canvas ref={canvasRef} />
     </div>
   );
-};
+});
+
+SimulationCanvas.displayName = 'SimulationCanvas';
 

@@ -22,3 +22,4 @@ export const DEFAULT_PARAMS: IFSParams = {
   scale: 1,
 };
 
+
