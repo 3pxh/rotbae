@@ -7,7 +7,6 @@ interface SimulationCanvasProps {
   isRunning: boolean;
   resetTrigger: number;
   clearTrigger: number;
-  saveImageTrigger: number;
   color: string;
   renderMode: 'chalk' | 'glow' | 'histogram';
   histogramColors: { low: string; mid: string; high: string };
@@ -35,7 +34,6 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({
   isRunning, 
   resetTrigger,
   clearTrigger,
-  saveImageTrigger,
   color,
   renderMode,
   histogramColors,
@@ -83,20 +81,6 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({
   useEffect(() => {
     speedRef.current = speed;
   }, [speed]);
-
-  // Handle Save Image
-  useEffect(() => {
-    if (saveImageTrigger === 0) return;
-    
-    const canvas = canvasRef.current;
-    if (canvas) {
-        // Create a temporary link to download the canvas as an image
-        const link = document.createElement('a');
-        link.download = `attractor-${Date.now()}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-    }
-  }, [saveImageTrigger]);
 
   // Handle Reset (Positions & Histogram Data)
   useEffect(() => {
