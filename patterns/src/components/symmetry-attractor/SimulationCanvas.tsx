@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useLayoutEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import type { SimulationParams } from './types';
 import './SimulationCanvas.css';
 
@@ -60,8 +60,8 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({
   const maxHitsRef = useRef<number>(0);
   const canvasSizeRef = useRef<{w: number, h: number}>({w: 0, h: 0});
 
-  // Stats
-  const [stats, setStats] = useState({ x: 0, y: 0, iterations: 0 });
+  // Stats (currently unused but kept for potential future use)
+  const [_stats, setStats] = useState({ x: 0, y: 0, iterations: 0 });
 
   // Update params ref when props change
   useEffect(() => {

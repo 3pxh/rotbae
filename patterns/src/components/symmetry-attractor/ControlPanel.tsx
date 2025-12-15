@@ -10,13 +10,8 @@ interface ControlPanelProps {
   onReset: () => void;
   onClear: () => void;
   onRestart: () => void;
-  onSaveImage: () => void;
   savedPresets: SavedPreset[];
-  onSavePreset: () => void;
   onLoadPreset: (preset: SavedPreset, clearCanvas?: boolean) => void;
-  onRemovePreset: (id: string) => void;
-  onImportPresets: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onDownloadPresets: () => void;
   color: string;
   onColorChange: (color: string) => void;
   renderMode: 'chalk' | 'glow' | 'histogram';
@@ -121,13 +116,8 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
     onReset,
     onClear,
     onRestart,
-    onSaveImage,
     savedPresets,
-    onSavePreset,
     onLoadPreset,
-    onRemovePreset,
-    onImportPresets,
-    onDownloadPresets,
     color,
     onColorChange,
     renderMode,
