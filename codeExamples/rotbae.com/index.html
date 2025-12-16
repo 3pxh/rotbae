@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ROTBAE.COM // OFFICIAL SITE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Brutalist Overrides */
+      body {
+        background-color: #ffffff;
+        color: #000000;
+        font-family: 'Courier New', Courier, monospace; /* Hard monospace */
+        -webkit-font-smoothing: none;
+      }
+      .brutal-border {
+        border: 2px solid black;
+      }
+      .brutal-border-b {
+        border-bottom: 2px solid black;
+      }
+      .brutal-border-t {
+        border-top: 2px solid black;
+      }
+      .brutal-border-l {
+        border-left: 2px solid black;
+      }
+      .brutal-border-r {
+        border-right: 2px solid black;
+      }
+      .brutal-hover:hover {
+        background-color: #000000;
+        color: #ffffff;
+        cursor: crosshair;
+      }
+      .marquee-container {
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      .marquee-content {
+        display: inline-block;
+        padding-left: 100%;
+        animation: marquee 20s linear infinite;
+      }
+      @keyframes marquee {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(-100%, 0); }
+      }
+      /* Custom Scrollbar for that raw feel */
+      ::-webkit-scrollbar {
+        width: 12px;
+        background: white;
+        border-left: 2px solid black;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: black;
+      }
+      input:focus, textarea:focus, button:focus {
+        outline: none;
+        background-color: #f0f0f0;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "@google/genai": "https://esm.sh/@google/genai@^1.33.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.561.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
