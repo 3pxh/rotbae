@@ -2,9 +2,9 @@ import { useRef, useEffect, forwardRef, useImperativeHandle } from 'react'
 import { withDownloadButton, type DownloadableComponentRef } from '@utilities/withDownloadButton'
 import './App.css'
 
-const App = forwardRef<DownloadableComponentRef>((_props, ref) => {
+const App = forwardRef<DownloadableComponentRef, {}>((_props, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationFrameRef = useRef<number>()
+  const animationFrameRef = useRef<number | undefined>(undefined)
 
   // Calculate days since November 26, 2025 (Pacific time)
   const calculateDaysSince = () => {
