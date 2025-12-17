@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/baeday/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BAEDAY</title>
+    <style>
+      /* Brutalist Overrides */
+      html, body {
+        background-color: #000000;
+        color: #ffffff;
+        -webkit-font-smoothing: antialiased;
+        margin: 0;
+        padding: 0;
+      }
+      input:focus, textarea:focus, button:focus {
+        outline: none;
+        background-color: #0f0f0f;
+      }
+      /* Custom Scrollbar for that raw feel */
+      ::-webkit-scrollbar {
+        width: 12px;
+        background: black;
+        border-left: 2px solid white;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
