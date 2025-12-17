@@ -64,7 +64,7 @@ function App() {
       <section className="youtube-section">
         <div className="youtube-wrapper">
           <iframe
-            src={`https://www.youtube.com/embed/videoseries?list=${playlistId}`}
+            src={`https://www.youtube.com/embed/videoseries?list=${playlistId}&autoplay=1&mute=1&loop=1`}
             title="YouTube playlist player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
