@@ -116,8 +116,13 @@ export const SimulationCanvas = forwardRef<SimulationCanvasRef, SimulationCanvas
       if (ctx) {
         const prevComposite = ctx.globalCompositeOperation;
         ctx.globalCompositeOperation = 'source-over';
-        ctx.fillStyle = 'black';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Use transparent background for glow and chalk modes, black for histogram
+        if (renderMode === 'glow' || renderMode === 'chalk') {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        } else {
+          ctx.fillStyle = 'black';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
         ctx.globalCompositeOperation = prevComposite;
       }
     }
@@ -140,8 +145,13 @@ export const SimulationCanvas = forwardRef<SimulationCanvasRef, SimulationCanvas
       if (ctx) {
         const prevComposite = ctx.globalCompositeOperation;
         ctx.globalCompositeOperation = 'source-over';
-        ctx.fillStyle = 'black';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Use transparent background for glow and chalk modes, black for histogram
+        if (renderMode === 'glow' || renderMode === 'chalk') {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        } else {
+          ctx.fillStyle = 'black';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
         ctx.globalCompositeOperation = prevComposite;
       }
     }
@@ -177,8 +187,14 @@ export const SimulationCanvas = forwardRef<SimulationCanvasRef, SimulationCanvas
         if (ctx) {
             ctx.scale(dpr, dpr); // Keep dpr scale for chalk/glow modes
             ctx.globalCompositeOperation = 'source-over';
-            ctx.fillStyle = 'black';
-            ctx.fillRect(0, 0, width, height);
+            // Use transparent background for glow and chalk modes, black for histogram
+            const currentMode = renderModeRef.current;
+            if (currentMode === 'glow' || currentMode === 'chalk') {
+              ctx.clearRect(0, 0, width, height);
+            } else {
+              ctx.fillStyle = 'black';
+              ctx.fillRect(0, 0, width, height);
+            }
         }
       }
     });

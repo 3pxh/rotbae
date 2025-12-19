@@ -4,6 +4,14 @@ import { rendererRegistry, type RendererType } from './renderers'
 
 export type SizeOption = 'FULL' | 'MAX_SQUARE' | 'MAX_16:9' | 'MAX_9:16' | 'CUSTOM'
 
+export interface BackgroundOptions {
+  enabled: boolean
+  isGradient: boolean
+  color1: string
+  color2: string
+  showLogo: boolean
+}
+
 interface DownloadModalProps {
   isOpen: boolean
   onClose: () => void
@@ -12,7 +20,8 @@ interface DownloadModalProps {
   onDownload: (
     sizes: Array<{ size: SizeOption; width?: number; height?: number }>,
     renderers: RendererType[],
-    name: string
+    name: string,
+    background: BackgroundOptions
   ) => void
 }
 
@@ -49,6 +58,11 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({
   const [imageSize, setImageSize] = useState<{ width: number; height: number } | null>(null)
   const [displaySize, setDisplaySize] = useState<{ width: number; height: number } | null>(null)
   const [previewDataURL, setPreviewDataURL] = useState<string | null>(null)
+  const [hasBackground, setHasBackground] = useState<boolean>(false)
+  const [isGradient, setIsGradient] = useState<boolean>(false)
+  const [backgroundColor1, setBackgroundColor1] = useState<string>('#ffffff')
+  const [backgroundColor2, setBackgroundColor2] = useState<string>('#000000')
+  const [showLogo, setShowLogo] = useState<boolean>(true)
   const imgRef = useRef<HTMLImageElement>(null)
   const previewRef = useRef<HTMLDivElement>(null)
   const rendererConfigs = rendererRegistry.getConfigs()
@@ -59,6 +73,11 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({
       setSelectedRenderers(new Set(['full']))
       setPreviewRenderer('full')
       setPreviewDataURL(null)
+      setHasBackground(false)
+      setIsGradient(false)
+      setBackgroundColor1('#ffffff')
+      setBackgroundColor2('#000000')
+      setShowLogo(true)
     }
   }, [isOpen])
 
@@ -75,7 +94,60 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({
     }
   }, [imageDataURL])
 
-  // Update preview when renderer selection changes
+  // Helper function to draw logo on canvas
+  const drawLogo = async (ctx: CanvasRenderingContext2D, width: number, height: number): Promise<void> => {
+    const logoSize = Math.min(width, height) * 0.08 // 8% of smaller dimension
+    const padding = logoSize * 0.5
+    const x = width - logoSize - padding
+    const y = height - logoSize - padding
+    
+    // Try to load logo image, fallback to text if not found
+    const logoImg = new Image()
+    logoImg.crossOrigin = 'anonymous'
+    
+    try {
+      // Logo from Imgur
+      await new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => reject(new Error('Timeout')), 2000)
+        logoImg.onload = () => {
+          clearTimeout(timeout)
+          resolve(undefined)
+        }
+        logoImg.onerror = () => {
+          clearTimeout(timeout)
+          reject(new Error('Failed to load'))
+        }
+        logoImg.src = 'https://i.imgur.com/i0sqtIb.jpg'
+      })
+      
+      if (logoImg.complete && logoImg.naturalWidth > 0) {
+        // Draw logo image, preserving aspect ratio
+        const aspectRatio = logoImg.naturalWidth / logoImg.naturalHeight
+        let drawWidth = logoSize
+        let drawHeight = logoSize
+        if (aspectRatio > 1) {
+          drawHeight = logoSize / aspectRatio
+        } else {
+          drawWidth = logoSize * aspectRatio
+        }
+        ctx.drawImage(logoImg, x + (logoSize - drawWidth) / 2, y + (logoSize - drawHeight) / 2, drawWidth, drawHeight)
+        return
+      }
+      throw new Error('Image not loaded')
+    } catch {
+      // Fallback to text if image not found
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.5)'
+      ctx.fillRect(x - padding * 0.5, y - padding * 0.5, logoSize + padding, logoSize + padding)
+      
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'
+      ctx.font = `bold ${logoSize * 0.3}px sans-serif`
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.fillText('ROTBAE', x + logoSize / 2, y + logoSize / 2)
+    }
+  }
+
+  // Update preview when renderer selection or background changes
   useEffect(() => {
     const updatePreview = async () => {
       if (!imageDataURL || !imageSize || !isOpen) {
@@ -89,11 +161,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({
         : Array.from(selectedRenderers)[0] || 'full'
       
       const renderer = rendererRegistry.get(activeRendererType)
-      if (!renderer) {
-        setPreviewDataURL(imageDataURL)
-        return
-      }
-
+      
       const img = new Image()
       img.crossOrigin = 'anonymous'
       img.onload = async () => {
@@ -107,16 +175,102 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({
         }
 
         try {
-          const context = {
-            sourceImage: img,
-            canvas,
-            ctx,
-            width: img.width,
-            height: img.height
-          }
+          // Apply renderer if available
+          if (renderer) {
+            const context = {
+              sourceImage: img,
+              canvas,
+              ctx,
+              width: img.width,
+              height: img.height
+            }
 
-          const result = await renderer.render(context)
-          setPreviewDataURL(result.dataURL)
+            const result = await renderer.render(context)
+            
+            // Draw background after renderer if enabled
+            if (hasBackground) {
+              // Create a new canvas to composite background + rendered image
+              const finalCanvas = document.createElement('canvas')
+              finalCanvas.width = img.width
+              finalCanvas.height = img.height
+              const finalCtx = finalCanvas.getContext('2d')
+              if (finalCtx) {
+                // Draw background first
+                if (isGradient) {
+                  const gradient = finalCtx.createLinearGradient(0, 0, finalCanvas.width, finalCanvas.height)
+                  gradient.addColorStop(0, backgroundColor1)
+                  gradient.addColorStop(1, backgroundColor2)
+                  finalCtx.fillStyle = gradient
+                } else {
+                  finalCtx.fillStyle = backgroundColor1
+                }
+                finalCtx.fillRect(0, 0, finalCanvas.width, finalCanvas.height)
+                
+                // Draw rendered image on top
+                const renderedImg = new Image()
+                await new Promise((resolve) => {
+                  renderedImg.onload = resolve
+                  renderedImg.src = result.dataURL
+                })
+                finalCtx.drawImage(renderedImg, 0, 0)
+                
+                // Draw logo if enabled
+                if (showLogo) {
+                  await drawLogo(finalCtx, finalCanvas.width, finalCanvas.height)
+                }
+                
+                setPreviewDataURL(finalCanvas.toDataURL('image/png'))
+              } else {
+                setPreviewDataURL(result.dataURL)
+              }
+            } else {
+              // No background, but might have logo
+              if (showLogo) {
+                const finalCanvas = document.createElement('canvas')
+                finalCanvas.width = img.width
+                finalCanvas.height = img.height
+                const finalCtx = finalCanvas.getContext('2d')
+                if (finalCtx) {
+                  const renderedImg = new Image()
+                  await new Promise((resolve) => {
+                    renderedImg.onload = resolve
+                    renderedImg.src = result.dataURL
+                  })
+                  finalCtx.drawImage(renderedImg, 0, 0)
+                  await drawLogo(finalCtx, finalCanvas.width, finalCanvas.height)
+                  setPreviewDataURL(finalCanvas.toDataURL('image/png'))
+                } else {
+                  setPreviewDataURL(result.dataURL)
+                }
+              } else {
+                setPreviewDataURL(result.dataURL)
+              }
+            }
+          } else {
+            // No renderer
+            if (hasBackground) {
+              // Draw background first
+              if (isGradient) {
+                const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height)
+                gradient.addColorStop(0, backgroundColor1)
+                gradient.addColorStop(1, backgroundColor2)
+                ctx.fillStyle = gradient
+              } else {
+                ctx.fillStyle = backgroundColor1
+              }
+              ctx.fillRect(0, 0, canvas.width, canvas.height)
+            }
+            
+            // Draw image on top
+            ctx.drawImage(img, 0, 0)
+            
+            // Draw logo if enabled
+            if (showLogo) {
+              await drawLogo(ctx, canvas.width, canvas.height)
+            }
+            
+            setPreviewDataURL(canvas.toDataURL('image/png'))
+          }
         } catch (error) {
           console.error('Preview render error:', error)
           setPreviewDataURL(imageDataURL) // Fallback to original
@@ -130,7 +284,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({
     }
 
     updatePreview()
-  }, [imageDataURL, imageSize, previewRenderer, selectedRenderers, isOpen])
+  }, [imageDataURL, imageSize, previewRenderer, selectedRenderers, isOpen, hasBackground, isGradient, backgroundColor1, backgroundColor2, showLogo])
 
   useEffect(() => {
     if (imgRef.current) {
@@ -304,7 +458,14 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({
     })
     const renderersToDownload = Array.from(selectedRenderers)
     const name = fileName.trim() || 'canvas'
-    onDownload(sizesToDownload, renderersToDownload, name)
+    const background: BackgroundOptions = {
+      enabled: hasBackground,
+      isGradient: isGradient,
+      color1: backgroundColor1,
+      color2: backgroundColor2,
+      showLogo: showLogo
+    }
+    onDownload(sizesToDownload, renderersToDownload, name, background)
   }
 
   // Calculate total number of images
@@ -436,6 +597,60 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({
               <span>{config.label}</span>
             </label>
           ))}
+        </div>
+        <div className="background-controls">
+          <label className="background-checkbox">
+            <input
+              type="checkbox"
+              checked={hasBackground}
+              onChange={(e) => setHasBackground(e.target.checked)}
+            />
+            <span>background</span>
+          </label>
+          {hasBackground && (
+            <>
+              <label className="gradient-checkbox">
+                <input
+                  type="checkbox"
+                  checked={isGradient}
+                  onChange={(e) => setIsGradient(e.target.checked)}
+                />
+                <span>gradient</span>
+              </label>
+              <div className="background-color-inputs">
+                <label className="color-input-label">
+                  <span>color 1:</span>
+                  <input
+                    type="color"
+                    value={backgroundColor1}
+                    onChange={(e) => setBackgroundColor1(e.target.value)}
+                    className="color-input"
+                  />
+                </label>
+                {isGradient && (
+                  <label className="color-input-label">
+                    <span>color 2:</span>
+                    <input
+                      type="color"
+                      value={backgroundColor2}
+                      onChange={(e) => setBackgroundColor2(e.target.value)}
+                      className="color-input"
+                    />
+                  </label>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+        <div className="logo-controls">
+          <label className="background-checkbox">
+            <input
+              type="checkbox"
+              checked={showLogo}
+              onChange={(e) => setShowLogo(e.target.checked)}
+            />
+            <span>rotbae logo</span>
+          </label>
         </div>
         <div className="download-modal-actions">
           <label className="download-name-input">
