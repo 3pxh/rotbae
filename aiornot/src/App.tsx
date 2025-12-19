@@ -114,11 +114,9 @@ function App() {
   const [aiProbability, setAiProbability] = useState<number | null>(null)
   const [currentPhrase, setCurrentPhrase] = useState<string>('')
   const [isFinished, setIsFinished] = useState<boolean>(false)
-  const [keyframeArray, setKeyframeArray] = useState<number[] | null>(null)
   const [tweenArray, setTweenArray] = useState<number[] | null>(null)
   const [currentTweenIndex, setCurrentTweenIndex] = useState<number>(0)
-  const [deterministicProbability, setDeterministicProbability] = useState<number | null>(null)
-  const tweenIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const tweenIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,8 +124,6 @@ function App() {
     if (file && file.type.startsWith('image/')) {
       // Hash image and generate keyframes
       const { keyframes, probability } = await hashImageAndGenerateKeyframes(file)
-      setKeyframeArray(keyframes)
-      setDeterministicProbability(probability)
       
       // Generate tween array with 15 ticks between each keyframe
       const tweens = generateTweenArray(keyframes)
@@ -207,10 +203,8 @@ function App() {
     setAiProbability(null)
     setCurrentPhrase('')
     setIsFinished(false)
-    setKeyframeArray(null)
     setTweenArray(null)
     setCurrentTweenIndex(0)
-    setDeterministicProbability(null)
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
