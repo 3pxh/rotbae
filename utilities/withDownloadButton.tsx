@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import JSZip from 'jszip'
-import { DownloadModal } from './DownloadModal'
+import { DownloadModal, type BackgroundOptions } from './DownloadModal'
 import { rendererRegistry, type RendererType } from './renderers'
 
 export interface DownloadableComponentRef {
@@ -98,14 +98,15 @@ export const withDownloadButton = <P extends Record<string, any> = {}>(
     const handleDownload = async (
       sizes: Array<{ size: 'FULL' | 'MAX_SQUARE' | 'MAX_16:9' | 'MAX_9:16' | 'CUSTOM'; width?: number; height?: number }>,
       renderers: RendererType[],
-      name: string
+      name: string,
+      background: BackgroundOptions
     ) => {
       if (!imageDataURL || !appRef.current) return
 
       setIsDownloading(true)
       const img = new Image()
       img.onload = async () => {
-        const processSize = (size: 'FULL' | 'MAX_SQUARE' | 'MAX_16:9' | 'MAX_9:16' | 'CUSTOM', customWidth?: number, customHeight?: number) => {
+        const processSize = async (size: 'FULL' | 'MAX_SQUARE' | 'MAX_16:9' | 'MAX_9:16' | 'CUSTOM', customWidth?: number, customHeight?: number) => {
           const canvas = document.createElement('canvas')
           let targetWidth = img.width
           let targetHeight = img.height
@@ -173,16 +174,16 @@ export const withDownloadButton = <P extends Record<string, any> = {}>(
           canvas.width = targetWidth
           canvas.height = targetHeight
           const ctx = canvas.getContext('2d')
-          if (ctx) {
-            // Draw the cropped portion from the center
-            ctx.drawImage(
-              img,
-              sourceX, sourceY, targetWidth, targetHeight,
-              0, 0, targetWidth, targetHeight
-            )
-            return { canvas, ctx, width: targetWidth, height: targetHeight }
-          }
-          return null
+          if (!ctx) return null
+          
+          // Draw the cropped image (background will be added after rendering if needed)
+          ctx.drawImage(
+            img,
+            sourceX, sourceY, targetWidth, targetHeight,
+            0, 0, targetWidth, targetHeight
+          )
+          
+          return { canvas, ctx, width: targetWidth, height: targetHeight }
         }
 
         const getSizeLabel = (size: 'FULL' | 'MAX_SQUARE' | 'MAX_16:9' | 'MAX_9:16' | 'CUSTOM', customWidth?: number, customHeight?: number) => {
@@ -201,7 +202,7 @@ export const withDownloadButton = <P extends Record<string, any> = {}>(
         const files: Array<{ name: string; data: string; extension: string }> = []
 
         for (const { size, width: customWidth, height: customHeight } of sizes) {
-          const croppedCanvas = processSize(size, customWidth, customHeight)
+          const croppedCanvas = await processSize(size, customWidth, customHeight)
           if (!croppedCanvas) continue
 
           const sizeLabel = getSizeLabel(size, customWidth, customHeight)
@@ -217,9 +218,6 @@ export const withDownloadButton = <P extends Record<string, any> = {}>(
               renderCanvas.height = croppedCanvas.height
               const renderCtx = renderCanvas.getContext('2d')
               if (!renderCtx) continue
-
-              // Draw cropped image to render canvas
-              renderCtx.drawImage(croppedCanvas.canvas, 0, 0)
 
               // Create a temporary image from the cropped canvas
               const tempImg = new Image()
@@ -239,9 +237,100 @@ export const withDownloadButton = <P extends Record<string, any> = {}>(
 
               const result = await renderer.render(context)
               
+              // Helper function to draw logo
+              const drawLogo = async (ctx: CanvasRenderingContext2D, width: number, height: number): Promise<void> => {
+                const logoSize = Math.min(width, height) * 0.08 // 8% of smaller dimension
+                const padding = logoSize * 0.5
+                const x = width - logoSize - padding
+                const y = height - logoSize - padding
+                
+                // Try to load logo image, fallback to text if not found
+                const logoImg = new Image()
+                logoImg.crossOrigin = 'anonymous'
+                
+    try {
+      // Logo from Imgur
+      await new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => reject(new Error('Timeout')), 2000)
+        logoImg.onload = () => {
+          clearTimeout(timeout)
+          resolve(undefined)
+        }
+        logoImg.onerror = () => {
+          clearTimeout(timeout)
+          reject(new Error('Failed to load'))
+        }
+        logoImg.src = 'https://i.imgur.com/i0sqtIb.jpg'
+      })
+      
+      if (logoImg.complete && logoImg.naturalWidth > 0) {
+        // Draw logo image, preserving aspect ratio
+        const aspectRatio = logoImg.naturalWidth / logoImg.naturalHeight
+        let drawWidth = logoSize
+        let drawHeight = logoSize
+        if (aspectRatio > 1) {
+          drawHeight = logoSize / aspectRatio
+        } else {
+          drawWidth = logoSize * aspectRatio
+        }
+        ctx.drawImage(logoImg, x + (logoSize - drawWidth) / 2, y + (logoSize - drawHeight) / 2, drawWidth, drawHeight)
+        return
+      }
+      throw new Error('Image not loaded')
+    } catch {
+      // Fallback to text if image not found
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.5)'
+      ctx.fillRect(x - padding * 0.5, y - padding * 0.5, logoSize + padding, logoSize + padding)
+      
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'
+      ctx.font = `bold ${logoSize * 0.3}px sans-serif`
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.fillText('ROTBAE', x + logoSize / 2, y + logoSize / 2)
+    }
+              }
+              
+              // Apply background and/or logo after rendering if enabled
+              let finalDataURL = result.dataURL
+              if (background.enabled || background.showLogo) {
+                const finalCanvas = document.createElement('canvas')
+                finalCanvas.width = croppedCanvas.width
+                finalCanvas.height = croppedCanvas.height
+                const finalCtx = finalCanvas.getContext('2d')
+                if (finalCtx) {
+                  // Draw background first if enabled
+                  if (background.enabled) {
+                    if (background.isGradient) {
+                      const gradient = finalCtx.createLinearGradient(0, 0, finalCanvas.width, finalCanvas.height)
+                      gradient.addColorStop(0, background.color1)
+                      gradient.addColorStop(1, background.color2)
+                      finalCtx.fillStyle = gradient
+                    } else {
+                      finalCtx.fillStyle = background.color1
+                    }
+                    finalCtx.fillRect(0, 0, finalCanvas.width, finalCanvas.height)
+                  }
+                  
+                  // Draw rendered image on top
+                  const renderedImg = new Image()
+                  await new Promise((resolve) => {
+                    renderedImg.onload = resolve
+                    renderedImg.src = result.dataURL
+                  })
+                  finalCtx.drawImage(renderedImg, 0, 0)
+                  
+                  // Draw logo if enabled
+                  if (background.showLogo) {
+                    await drawLogo(finalCtx, finalCanvas.width, finalCanvas.height)
+                  }
+                  
+                  finalDataURL = finalCanvas.toDataURL('image/png')
+                }
+              }
+              
               files.push({
                 name: `${baseName}-${sizeLabel}-${rendererType}-${timestamp}`,
-                data: result.dataURL,
+                data: finalDataURL,
                 extension: result.fileExtension
               })
             } catch (error) {

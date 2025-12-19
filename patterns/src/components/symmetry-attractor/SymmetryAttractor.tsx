@@ -13,11 +13,11 @@ const SymmetryAttractor = forwardRef<DownloadableComponentRef>((_props, ref) => 
   const [resetTrigger, setResetTrigger] = useState<number>(0);
   const [clearTrigger, setClearTrigger] = useState<number>(0);
   const [savedPresets, setSavedPresets] = useState<SavedPreset[]>([]);
-  const [color, setColor] = useState<string>('#34d399'); // Default emerald-400
+  const [color, setColor] = useState<string>('#ff00ff'); // Default magenta for glow and chalk
   const [histogramColors, setHistogramColors] = useState({
-    low: '#1e3a8a', // Blue-900
-    mid: '#ef4444', // Red-500
-    high: '#fef08a' // Yellow-200
+    low: '#ff00ff', // Magenta
+    mid: '#00ffff', // Cyan blue
+    high: '#ffff00' // Yellow
   });
   const [renderMode, setRenderMode] = useState<'chalk' | 'glow' | 'histogram'>('chalk');
   const [speed, setSpeed] = useState<number>(50); // 1-100

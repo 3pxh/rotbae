@@ -15,7 +15,7 @@ const patterns: PatternLink[] = [
   {
     name: 'Symmetric Icon',
     slug: 'symmetry-attractor',
-    image: '/patterns/symmetric-icon.png',
+    image: 'https://i.imgur.com/fGBPcpy.jpg',
     description: 'A web-based implementation of a BASIC fractal attractor generation program.',
   },
   {
