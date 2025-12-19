@@ -50,6 +50,12 @@
   status = 200
   force = false
 
+[[redirects]]
+  from = "/aiornot/*"
+  to = "/aiornot/index.html"
+  status = 200
+  force = false
+
 # Headers for security and performance
 [[headers]]
   for = "/*"

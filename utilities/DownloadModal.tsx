@@ -161,7 +161,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({
         : Array.from(selectedRenderers)[0] || 'full'
       
       const renderer = rendererRegistry.get(activeRendererType)
-      
+
       const img = new Image()
       img.crossOrigin = 'anonymous'
       img.onload = async () => {
@@ -177,15 +177,15 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({
         try {
           // Apply renderer if available
           if (renderer) {
-            const context = {
-              sourceImage: img,
-              canvas,
-              ctx,
-              width: img.width,
-              height: img.height
-            }
+          const context = {
+            sourceImage: img,
+            canvas,
+            ctx,
+            width: img.width,
+            height: img.height
+          }
 
-            const result = await renderer.render(context)
+          const result = await renderer.render(context)
             
             // Draw background after renderer if enabled
             if (hasBackground) {
@@ -243,7 +243,7 @@ export const DownloadModal: React.FC<DownloadModalProps> = ({
                   setPreviewDataURL(result.dataURL)
                 }
               } else {
-                setPreviewDataURL(result.dataURL)
+          setPreviewDataURL(result.dataURL)
               }
             }
           } else {
