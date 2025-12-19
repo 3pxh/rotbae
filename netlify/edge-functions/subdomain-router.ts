@@ -7,7 +7,7 @@ export default async (request: Request) => {
   const pathname = url.pathname;
 
   // List of known subdomain folders (update when adding new projects)
-  const knownSubdomains = ['home', 'stream', 'admin', 'drops', 'void', 'patterns', 'testCanvas', 'baeday']; // Add new projects here
+  const knownSubdomains = ['home', 'stream', 'admin', 'drops', 'void', 'patterns', 'testCanvas', 'baeday', 'aiornot']; // Add new projects here
   
   // Map of host patterns to subdomain folders
   const hostMap: Record<string, string> = {
@@ -20,6 +20,7 @@ export default async (request: Request) => {
     'patterns.rotbae.com': 'patterns',
     'testcanvas.rotbae.com': 'testCanvas',
     'baeday.rotbae.com': 'baeday',
+    'aiornot.rotbae.com': 'aiornot',
   };
 
   // Pass through API requests to Netlify functions

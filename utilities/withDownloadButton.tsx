@@ -177,13 +177,13 @@ export const withDownloadButton = <P extends Record<string, any> = {}>(
           if (!ctx) return null
           
           // Draw the cropped image (background will be added after rendering if needed)
-          ctx.drawImage(
-            img,
-            sourceX, sourceY, targetWidth, targetHeight,
-            0, 0, targetWidth, targetHeight
-          )
+            ctx.drawImage(
+              img,
+              sourceX, sourceY, targetWidth, targetHeight,
+              0, 0, targetWidth, targetHeight
+            )
           
-          return { canvas, ctx, width: targetWidth, height: targetHeight }
+            return { canvas, ctx, width: targetWidth, height: targetHeight }
         }
 
         const getSizeLabel = (size: 'FULL' | 'MAX_SQUARE' | 'MAX_16:9' | 'MAX_9:16' | 'CUSTOM', customWidth?: number, customHeight?: number) => {
