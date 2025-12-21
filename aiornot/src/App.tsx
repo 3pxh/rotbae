@@ -114,6 +114,7 @@ function App() {
   const [aiProbability, setAiProbability] = useState<number | null>(null)
   const [currentPhrase, setCurrentPhrase] = useState<string>('')
   const [isFinished, setIsFinished] = useState<boolean>(false)
+  const [showFinished, setShowFinished] = useState<boolean>(false)
   const [tweenArray, setTweenArray] = useState<number[] | null>(null)
   const [currentTweenIndex, setCurrentTweenIndex] = useState<number>(0)
   const tweenIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -137,6 +138,7 @@ function App() {
         setAiProbability(null)
         setCurrentPhrase('')
         setIsFinished(false)
+        setShowFinished(false)
         setCurrentTweenIndex(0)
         
         // Store probability in closure for use in setTimeout
@@ -171,6 +173,7 @@ function App() {
             if (index === PHASE_KEYS.length - 1) {
               setTimeout(() => {
                 setIsFinished(true)
+                setShowFinished(true)
                 // Use deterministic probability from hash
                 setAiProbability(finalProbability)
                 // Stop tween animation
@@ -178,6 +181,10 @@ function App() {
                   clearInterval(tweenIntervalRef.current)
                   tweenIntervalRef.current = null
                 }
+                // Hide "FINISHED!" after 0.25 seconds
+                setTimeout(() => {
+                  setShowFinished(false)
+                }, 0)
               }, PHASE_DURATION)
             }
           }, index * PHASE_DURATION)
@@ -203,6 +210,7 @@ function App() {
     setAiProbability(null)
     setCurrentPhrase('')
     setIsFinished(false)
+    setShowFinished(false)
     setTweenArray(null)
     setCurrentTweenIndex(0)
     if (fileInputRef.current) {
@@ -238,9 +246,6 @@ function App() {
           
           {isAnalyzing && (
             <div className="analyze-mode">
-              <div className="analyze-title">
-                {aiProbability !== null ? 'FINISHED!' : isFinished ? 'FINISHED!' : `ANALYZING: ${currentPhrase || 'ANALYZING...'}`}
-              </div>
               <div className="progress-bar-container">
                 <div className="progress-bar-labels">
                   <span className="label-left">NOT AI</span>
@@ -279,6 +284,16 @@ function App() {
                   </div>
                 )}
               </div>
+              {showFinished && (
+                <div className="analyze-title">
+                  FINISHED!
+                </div>
+              )}
+              {!showFinished && !aiProbability && (
+                <div className="analyze-title">
+                  ANALYZING: {currentPhrase || 'ANALYZING...'}
+                </div>
+              )}
             </div>
           )}
         </div>
