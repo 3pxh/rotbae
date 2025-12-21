@@ -113,7 +113,6 @@ function App() {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [aiProbability, setAiProbability] = useState<number | null>(null)
   const [currentPhrase, setCurrentPhrase] = useState<string>('')
-  const [isFinished, setIsFinished] = useState<boolean>(false)
   const [showFinished, setShowFinished] = useState<boolean>(false)
   const [tweenArray, setTweenArray] = useState<number[] | null>(null)
   const [currentTweenIndex, setCurrentTweenIndex] = useState<number>(0)
@@ -137,7 +136,6 @@ function App() {
         setIsAnalyzing(true)
         setAiProbability(null)
         setCurrentPhrase('')
-        setIsFinished(false)
         setShowFinished(false)
         setCurrentTweenIndex(0)
         
@@ -172,7 +170,6 @@ function App() {
             // On the last phase, set finished and immediately set the probability
             if (index === PHASE_KEYS.length - 1) {
               setTimeout(() => {
-                setIsFinished(true)
                 setShowFinished(true)
                 // Use deterministic probability from hash
                 setAiProbability(finalProbability)
@@ -209,7 +206,6 @@ function App() {
     setIsAnalyzing(false)
     setAiProbability(null)
     setCurrentPhrase('')
-    setIsFinished(false)
     setShowFinished(false)
     setTweenArray(null)
     setCurrentTweenIndex(0)

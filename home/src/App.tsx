@@ -44,11 +44,9 @@ function App() {
 
   // Site map links - update with your actual routes
   const siteMapLinks = [
-    { name: 'STORE', path: 'https://rotbae.printify.me/', external: true },
-    { name: 'STREAM', path: '/stream' },
-    { name: 'DROPS', path: '/drops' },
-    { name: 'VOID', path: '/void' },
-    { name: 'PATTERNS', path: '/patterns' },
+    { name: 'BAEDAY', path: 'https://baeday.rotbae.com', external: true  },
+    { name: 'AI OR NOT', path: 'https://aiornot.rotbae.com', external: true  },
+    { name: 'PATTERNS', path: 'https://patterns.rotbae.com', external: true  }, 
   ]
 
   return (
