@@ -44,6 +44,7 @@ function App() {
 
   // Site map links - update with your actual routes
   const siteMapLinks = [
+    { name: 'VOID', path: 'https://void.rotbae.com', external: true  },
     { name: 'BAEDAY', path: 'https://baeday.rotbae.com', external: true  },
     { name: 'AI OR NOT', path: 'https://aiornot.rotbae.com', external: true  },
     { name: 'PATTERNS', path: 'https://patterns.rotbae.com', external: true  }, 
