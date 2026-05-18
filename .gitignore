@@ -13,6 +13,9 @@ dist-ssr
 *.local
 .vite
 
+# Generated: node scripts/sync-consent-banner.mjs (source: utilities/consent-banner/)
+**/public/rotbae-consent.js
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

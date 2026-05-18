@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { SiteHeader } from '@utilities/SiteHeader'
 import './App.css'
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
 
   return (
     <div className="app-container">
+      <SiteHeader logoSrc="/home/home.png" logoAlt="ROTBAE" />
       {/* Marquee */}
       <div className="marquee">
         <div className="marquee-content">

@@ -1,0 +1,376 @@
+[
+  {
+    "id": "music-rot",
+    "slug": "rot",
+    "title": "rot",
+    "url": "https://www.youtube.com/watch?v=YxPRx2ogHqU&list=PLsPEBqR2yutSe059XsxSPNW4465PKOrWM",
+    "byArtist": "ROTBAE",
+    "coverImage": "sourceOfTruth/album-art/rot_1000x1000.jpg",
+    "songs": [
+      {
+        "id": "rot-stay",
+        "slug": "stay",
+        "title": "stay",
+        "trackNumber": 1,
+        "lyricsPath": "sourceOfTruth/lyrics/rot/stay.md",
+        "url": "https://music.rotbae.com/rot/stay"
+      },
+      {
+        "id": "rot-juicy",
+        "slug": "juicy",
+        "title": "juicy",
+        "trackNumber": 2,
+        "lyricsPath": "sourceOfTruth/lyrics/rot/juicy.md",
+        "url": "https://music.rotbae.com/rot/juicy"
+      },
+      {
+        "id": "rot-lazy",
+        "slug": "lazy",
+        "title": "lazy",
+        "trackNumber": 3,
+        "lyricsPath": "sourceOfTruth/lyrics/rot/lazy.md",
+        "url": "https://music.rotbae.com/rot/lazy"
+      },
+      {
+        "id": "rot-cope",
+        "slug": "cope",
+        "title": "cope",
+        "trackNumber": 4,
+        "lyricsPath": "sourceOfTruth/lyrics/rot/cope.md",
+        "url": "https://music.rotbae.com/rot/cope"
+      },
+      {
+        "id": "rot-double",
+        "slug": "double",
+        "title": "double",
+        "trackNumber": 5,
+        "lyricsPath": "sourceOfTruth/lyrics/rot/double.md",
+        "url": "https://music.rotbae.com/rot/double"
+      },
+      {
+        "id": "rot-truth",
+        "slug": "truth",
+        "title": "truth",
+        "trackNumber": 6,
+        "lyricsPath": "sourceOfTruth/lyrics/rot/truth.md",
+        "url": "https://music.rotbae.com/rot/truth"
+      },
+      {
+        "id": "rot-austere",
+        "slug": "austere",
+        "title": "austere",
+        "trackNumber": 7,
+        "lyricsPath": "sourceOfTruth/lyrics/rot/austere.md",
+        "url": "https://music.rotbae.com/rot/austere"
+      },
+      {
+        "id": "rot-style",
+        "slug": "style",
+        "title": "style",
+        "trackNumber": 8,
+        "lyricsPath": "sourceOfTruth/lyrics/rot/style.md",
+        "url": "https://music.rotbae.com/rot/style"
+      },
+      {
+        "id": "rot-brainrot",
+        "slug": "brainrot",
+        "title": "brainrot",
+        "trackNumber": 9,
+        "lyricsPath": "sourceOfTruth/lyrics/rot/brainrot.md",
+        "url": "https://music.rotbae.com/rot/brainrot"
+      },
+      {
+        "id": "rot-yes",
+        "slug": "yes",
+        "title": "yes",
+        "trackNumber": 10,
+        "lyricsPath": "sourceOfTruth/lyrics/rot/yes.md",
+        "url": "https://music.rotbae.com/rot/yes"
+      }
+    ]
+  },
+  {
+    "id": "music-rot-rotaes-version",
+    "slug": "rot-rotaes-version",
+    "title": "rot (ROTBAE's version)",
+    "url": "https://open.spotify.com/album/115oMa9RVVgKNNXAGfjb1L?si=2N_mF5ELSjCx28rXIdST2Q",
+    "byArtist": "ROTBAE",
+    "coverImage": "sourceOfTruth/album-art/rot_version_1000x1000.jpg",
+    "songs": [
+      {
+        "id": "rbv-stay",
+        "slug": "stay",
+        "title": "stay (ROTBAE's version)",
+        "trackNumber": 1,
+        "lyricsPath": "sourceOfTruth/lyrics/rot-rotaes-version/stay.md",
+        "url": "https://music.rotbae.com/rot-rotaes-version/stay"
+      },
+      {
+        "id": "rbv-juicy",
+        "slug": "juicy",
+        "title": "juicy (ROTBAE's version)",
+        "trackNumber": 2,
+        "lyricsPath": "sourceOfTruth/lyrics/rot-rotaes-version/juicy.md",
+        "url": "https://music.rotbae.com/rot-rotaes-version/juicy"
+      },
+      {
+        "id": "rbv-lazy",
+        "slug": "lazy",
+        "title": "lazy (ROTBAE's version)",
+        "trackNumber": 3,
+        "lyricsPath": "sourceOfTruth/lyrics/rot-rotaes-version/lazy.md",
+        "url": "https://music.rotbae.com/rot-rotaes-version/lazy"
+      },
+      {
+        "id": "rbv-cope",
+        "slug": "cope",
+        "title": "cope (ROTBAE's version)",
+        "trackNumber": 4,
+        "lyricsPath": "sourceOfTruth/lyrics/rot-rotaes-version/cope.md",
+        "url": "https://music.rotbae.com/rot-rotaes-version/cope"
+      },
+      {
+        "id": "rbv-double",
+        "slug": "double",
+        "title": "double (ROTBAE's version)",
+        "trackNumber": 5,
+        "lyricsPath": "sourceOfTruth/lyrics/rot-rotaes-version/double.md",
+        "url": "https://music.rotbae.com/rot-rotaes-version/double"
+      },
+      {
+        "id": "rbv-truth",
+        "slug": "truth",
+        "title": "truth (ROTBAE's version)",
+        "trackNumber": 6,
+        "lyricsPath": "sourceOfTruth/lyrics/rot-rotaes-version/truth.md",
+        "url": "https://music.rotbae.com/rot-rotaes-version/truth"
+      },
+      {
+        "id": "rbv-austere",
+        "slug": "austere",
+        "title": "austere (ROTBAE's version)",
+        "trackNumber": 7,
+        "lyricsPath": "sourceOfTruth/lyrics/rot-rotaes-version/austere.md",
+        "url": "https://music.rotbae.com/rot-rotaes-version/austere"
+      },
+      {
+        "id": "rbv-style",
+        "slug": "style",
+        "title": "style (ROTBAE's version)",
+        "trackNumber": 8,
+        "lyricsPath": "sourceOfTruth/lyrics/rot-rotaes-version/style.md",
+        "url": "https://music.rotbae.com/rot-rotaes-version/style"
+      },
+      {
+        "id": "rbv-brainrot",
+        "slug": "brainrot",
+        "title": "brainrot (ROTBAE's version)",
+        "trackNumber": 9,
+        "lyricsPath": "sourceOfTruth/lyrics/rot-rotaes-version/brainrot.md",
+        "url": "https://music.rotbae.com/rot-rotaes-version/brainrot"
+      },
+      {
+        "id": "rbv-yes",
+        "slug": "yes",
+        "title": "yes (ROTBAE's version)",
+        "trackNumber": 10,
+        "lyricsPath": "sourceOfTruth/lyrics/rot-rotaes-version/yes.md",
+        "url": "https://music.rotbae.com/rot-rotaes-version/yes"
+      }
+    ]
+  },
+  {
+    "id": "music-rimming-the-zeitgeist",
+    "slug": "rimming-the-zeitgeist",
+    "title": "Rimming the Zeitgeist",
+    "url": "https://too.fm/lnb7mne",
+    "byArtist": "ROTBAE",
+    "coverImage": "sourceOfTruth/album-art/Rimming_the_Zeitgeist_1000x1000.jpg",
+    "songs": [
+      {
+        "id": "rtz-power",
+        "slug": "power",
+        "title": "Power",
+        "trackNumber": 1,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/power.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/power"
+      },
+      {
+        "id": "rtz-cerebroputrefaccion",
+        "slug": "cerebroputrefaccion",
+        "title": "Cerebroputrefacción",
+        "trackNumber": 2,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/cerebroputrefaccion.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/cerebroputrefaccion"
+      },
+      {
+        "id": "rtz-ownership",
+        "slug": "ownership",
+        "title": "Ownership",
+        "trackNumber": 3,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/ownership.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/ownership"
+      },
+      {
+        "id": "rtz-dream",
+        "slug": "dream",
+        "title": "Dream",
+        "trackNumber": 4,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/dream.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/dream"
+      },
+      {
+        "id": "rtz-will",
+        "slug": "will",
+        "title": "Will",
+        "trackNumber": 5,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/will.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/will"
+      },
+      {
+        "id": "rtz-real",
+        "slug": "real",
+        "title": "Real",
+        "trackNumber": 6,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/real.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/real"
+      },
+      {
+        "id": "rtz-think",
+        "slug": "think",
+        "title": "Think",
+        "trackNumber": 7,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/think.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/think"
+      },
+      {
+        "id": "rtz-squint",
+        "slug": "squint",
+        "title": "Squint",
+        "trackNumber": 8,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/squint.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/squint"
+      },
+      {
+        "id": "rtz-red-balloon",
+        "slug": "red-balloon",
+        "title": "Red balloon",
+        "trackNumber": 9,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/red-balloon.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/red-balloon"
+      },
+      {
+        "id": "rtz-dance",
+        "slug": "dance",
+        "title": "Dance",
+        "trackNumber": 10,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/dance.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/dance"
+      },
+      {
+        "id": "rtz-ponzi",
+        "slug": "ponzi",
+        "title": "Ponzi",
+        "trackNumber": 11,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/ponzi.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/ponzi"
+      },
+      {
+        "id": "rtz-penultimate",
+        "slug": "penultimate",
+        "title": "Penultimate",
+        "trackNumber": 12,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/penultimate.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/penultimate"
+      },
+      {
+        "id": "rtz-like",
+        "slug": "like",
+        "title": "Like",
+        "trackNumber": 13,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/like.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/like"
+      },
+      {
+        "id": "rtz-rotmasday",
+        "slug": "rotmasday",
+        "title": "Rotmasday",
+        "trackNumber": 14,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/rotmasday.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/rotmasday"
+      },
+      {
+        "id": "rtz-ctrl-alt-delete",
+        "slug": "ctrl-alt-delete",
+        "title": "CTRL+ALT+DELETE",
+        "trackNumber": 15,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/ctrl-alt-delete.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/ctrl-alt-delete"
+      },
+      {
+        "id": "rtz-everywhere",
+        "slug": "everywhere",
+        "title": "Everywhere",
+        "trackNumber": 16,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/everywhere.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/everywhere"
+      },
+      {
+        "id": "rtz-vaping",
+        "slug": "vaping",
+        "title": "Vaping",
+        "trackNumber": 17,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/vaping.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/vaping"
+      },
+      {
+        "id": "rtz-school",
+        "slug": "school",
+        "title": "School",
+        "trackNumber": 18,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/school.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/school"
+      },
+      {
+        "id": "rtz-tower",
+        "slug": "tower",
+        "title": "Tower",
+        "trackNumber": 19,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/tower.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/tower"
+      },
+      {
+        "id": "rtz-uberfucked",
+        "slug": "uberfucked",
+        "title": "ÜBERFUCKED",
+        "trackNumber": 20,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/uberfucked.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/uberfucked"
+      },
+      {
+        "id": "rtz-numb",
+        "slug": "numb",
+        "title": "Numb",
+        "trackNumber": 21,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/numb.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/numb"
+      },
+      {
+        "id": "rtz-double-punch",
+        "slug": "double-punch",
+        "title": "Double Punch",
+        "trackNumber": 23,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/double-punch.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/double-punch"
+      },
+      {
+        "id": "rtz-me",
+        "slug": "me",
+        "title": "Me",
+        "trackNumber": 24,
+        "lyricsPath": "sourceOfTruth/lyrics/rimming-the-zeitgeist/me.md",
+        "url": "https://music.rotbae.com/rimming-the-zeitgeist/me"
+      }
+    ]
+  }
+]

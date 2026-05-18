@@ -27,6 +27,12 @@
   force = false
 
 [[redirects]]
+  from = "/music/*"
+  to = "/music/index.html"
+  status = 200
+  force = false
+
+[[redirects]]
   from = "/drops/*"
   to = "/drops/index.html"
   status = 200

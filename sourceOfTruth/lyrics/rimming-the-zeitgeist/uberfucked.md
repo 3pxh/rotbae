@@ -1,0 +1,16 @@
+we're
+we're über
+we're über
+we're über fucked
+we're über fucked
+we're über fucked fucked fucked
+
+ÜBERFUCKED  ÜBERFUCKED
+  ÜBERFUCKED  FUCKED FUCKED FUCKED
+
+ÜBERFUCKED  ÜBERFUCKED
+  ÜBERFUCKED  FUCKED FUCKED FUCKED (ÜBERFUCKED)
+
+ÜBERFUCKED  ÜBERFUCKED
+  ÜBERFUCKED  FUCKED FUCKED FUCKED (ÜBERFUCKED)
+

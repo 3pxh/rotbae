@@ -25,3 +25,28 @@ export type SavedPreset = {
   params: SimulationParams;
 }
 
+export function isSimulationParams(value: unknown): value is SimulationParams {
+  if (typeof value !== 'object' || value === null) return false
+  const p = value as Record<string, unknown>
+  return (
+    typeof p.lambda === 'number' &&
+    typeof p.alpha === 'number' &&
+    typeof p.beta === 'number' &&
+    typeof p.gamma === 'number' &&
+    typeof p.omega === 'number' &&
+    typeof p.n === 'number' &&
+    typeof p.scale === 'number'
+  )
+}
+
+export function isValidSavedPreset(p: unknown): p is SavedPreset {
+  if (typeof p !== 'object' || p === null) return false
+  const o = p as Record<string, unknown>
+  return (
+    typeof o.id === 'string' &&
+    typeof o.name === 'string' &&
+    typeof o.timestamp === 'number' &&
+    isSimulationParams(o.params)
+  )
+}
+

@@ -1,0 +1,456 @@
+.music-app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.music-main {
+  flex: 1;
+  padding: 1.5rem clamp(1rem, 5vw, 2.5rem) 3rem;
+  max-width: min(62rem, 100%);
+  margin: 0 auto;
+  /* Album cards use intrinsic widths; allow horizontal scroll if the row is wider than the viewport. */
+  overflow-x: auto;
+}
+
+.music-main__title {
+  margin: 0 0 0.75rem;
+  font-size: 1.125rem;
+  font-weight: bold;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.music-releases {
+  display: grid;
+  /* max-content columns: each album as wide as its longest single-line title/link. */
+  grid-template-columns: 1fr;
+  gap: clamp(1rem, 3vw, 1.75rem);
+  align-items: start;
+  justify-items: start;
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 40rem) {
+  .music-releases {
+    grid-template-columns: repeat(2, max-content);
+    justify-items: start;
+  }
+}
+
+@media (min-width: 56rem) {
+  .music-releases {
+    grid-template-columns: repeat(3, max-content);
+  }
+}
+
+.music-release {
+  margin-top: 0;
+  padding: 1rem 0 1.25rem;
+  border: 2px solid #000;
+  box-shadow: 6px 6px 0 0 rgba(0, 0, 0, 1);
+  width: max-content;
+  min-width: min-content;
+}
+
+.music-release__head {
+  padding: 0 1rem 0.75rem;
+  border-bottom: 2px solid #000;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.music-release__name {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.music-release__meta {
+  display: flex;
+  align-items: baseline;
+  width: 100%;
+  margin: 0.35rem 0 0;
+  padding: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.music-release__artist {
+  flex-shrink: 0;
+  font-weight: normal;
+}
+
+.music-release__meta-sep {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.music-release__play-now {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: inherit;
+  font-weight: bold;
+}
+
+.music-release ol {
+  margin: 0;
+  list-style-position: outside;
+  padding-block: 1rem 0;
+  padding-inline: clamp(3rem, 9vw, 3.75rem) 1rem;
+}
+
+.music-release li {
+  margin-bottom: 0.35rem;
+  white-space: nowrap;
+}
+
+.music-release ol a {
+  white-space: nowrap;
+}
+
+.music-release a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.music-release a:hover {
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+}
+
+.music-release__more {
+  display: block;
+  margin: 1rem 0 0;
+  padding: 0 1rem;
+  text-align: right;
+  box-sizing: border-box;
+  color: inherit;
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.music-release__more:hover {
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+}
+
+.music-song {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: clamp(1rem, 3vw, 2rem);
+  min-width: 0;
+}
+
+.music-song__main {
+  min-width: 0;
+  flex: 1;
+}
+
+.music-song--center-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-rows: auto auto auto;
+  align-items: start;
+  column-gap: clamp(1rem, 4vw, 3rem);
+  row-gap: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.music-song--center-main > .music-song__main:is(:only-child) {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+
+.music-song--center-main > .music-song__album-span {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  justify-self: center;
+  text-align: center;
+}
+
+.music-song--center-main > .music-song__rail--prev {
+  grid-column: 1;
+  grid-row: 2;
+  justify-self: end;
+  align-self: center;
+}
+
+.music-song--center-main > .music-song__title {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+}
+
+.music-song--center-main > .music-song__rail--next {
+  grid-column: 3;
+  grid-row: 2;
+  justify-self: start;
+  align-self: center;
+}
+
+.music-song--center-main > .music-song__main-column {
+  grid-column: 2;
+  grid-row: 3;
+  min-width: 0;
+  width: 100%;
+}
+
+.music-song__rail {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.music-song__rail-inner {
+  display: inline-block;
+  max-width: 100%;
+  text-align: start;
+}
+
+.music-song__rail-inner .music-song__skip {
+  display: inline;
+}
+
+.music-song--center-main .music-song__lyrics {
+  text-align: left;
+}
+
+.music-song--center-main .music-song__nav {
+  justify-content: center;
+}
+
+@media (max-width: 840px) {
+  .music-song--center-main {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .music-song__rail {
+    display: none;
+  }
+}
+
+.music-song__back {
+  display: inline-block;
+  flex-shrink: 0;
+  color: inherit;
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.music-song__back:hover {
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+}
+
+.music-song__head {
+  margin-bottom: 1.25rem;
+}
+
+.music-song__album {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+}
+
+.music-song__artist {
+  letter-spacing: 0.1em;
+}
+
+.music-song__title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+}
+
+.music-song--center-main > .music-song__title {
+  margin-bottom: 1.25rem;
+}
+
+.music-song__lyrics {
+  margin: 0;
+  font-family: inherit;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+  tab-size: 4;
+}
+
+.music-song__missing {
+  margin: 0 0 1rem;
+}
+
+.music-album-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: clamp(1rem, 3vw, 2rem);
+  width: 100%;
+  min-width: 0;
+}
+
+.music-album__main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  min-width: 0;
+  max-width: min(42rem, 100%);
+}
+
+.music-album__cover {
+  display: block;
+  width: min(480px, 100%);
+  height: auto;
+  border: 2px solid #000;
+  box-shadow: 6px 6px 0 0 rgba(0, 0, 0, 1);
+}
+
+.music-album__head {
+  margin: 0;
+}
+
+.music-album__title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+}
+
+.music-album__meta-row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  width: 100%;
+  min-width: 0;
+  margin: 0.35rem 0 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.music-album__artist {
+  flex-shrink: 0;
+  margin: 0;
+  font-weight: normal;
+}
+
+.music-album__artist-sep {
+  flex-shrink: 0;
+  margin: 0 0.25rem;
+  opacity: 0.7;
+}
+
+.music-album__play-inline {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: inherit;
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.music-album__play-inline:hover {
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+}
+
+.music-album__tracks {
+  margin: 0;
+  list-style-position: outside;
+  padding-inline: clamp(2.5rem, 8vw, 3.25rem) 0;
+  padding-block: 0;
+}
+
+.music-album__tracks li {
+  margin-bottom: 0.35rem;
+  white-space: nowrap;
+}
+
+.music-album__tracks a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.music-album__tracks a:hover {
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+}
+
+.music-album__more {
+  align-self: flex-start;
+  width: min(480px, 100%);
+  display: block;
+  margin-top: 0.5rem;
+  text-align: right;
+  box-sizing: border-box;
+  color: inherit;
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.music-album__more:hover {
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+}
+
+.music-song__album-crumb {
+  color: inherit;
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.music-song__album-crumb:hover {
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+}
+
+.music-song__nav {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: baseline;
+}
+
+.music-song__skip {
+  color: inherit;
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.music-song__skip:hover {
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+}

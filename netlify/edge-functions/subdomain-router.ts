@@ -7,26 +7,15 @@ export default async (request: Request) => {
   const pathname = url.pathname;
 
   // List of known subdomain folders (update when adding new projects)
-  const knownSubdomains = ['home', 'stream', 'admin', 'drops', 'void', 'patterns', 'testCanvas', 'baeday', 'aiornot']; // Add new projects here
+  const knownSubdomains = ['stream', 'music', 'admin']; // Path prefix pass-through under rotbae.com/...
   
   // Map of host patterns to subdomain folders
   const hostMap: Record<string, string> = {
-    'rotbae.com': 'home',
-    'www.rotbae.com': 'home',
-    'home.rotbae.com': 'home',
+    'rotbae.com': 'stream',
+    'www.rotbae.com': 'stream',
     'stream.rotbae.com': 'stream',
-    'drops.rotbae.com': 'drops',
-    'void.rotbae.com': 'void',
-    'patterns.rotbae.com': 'patterns',
-    'testcanvas.rotbae.com': 'testCanvas',
-    'baeday.rotbae.com': 'baeday',
-    'aiornot.rotbae.com': 'aiornot',
+    'music.rotbae.com': 'music',
   };
-
-  // Pass through API requests to Netlify functions
-  if (pathname.startsWith('/.netlify/functions/')) {
-    return;
-  }
 
   // Check if pathname already starts with a known subdomain folder
   // This handles direct access like rotbae.com/admin/ or rotbae.com/stream/
@@ -46,11 +35,11 @@ export default async (request: Request) => {
     if (hostParts.length >= 3 && hostParts[hostParts.length - 2] === 'rotbae') {
       // Extract subdomain (first part before rotbae.com)
       const potentialSubdomain = hostParts[0];
-      // Default to home for now, but you can add logic to check if folder exists
-      subdomain = potentialSubdomain === 'www' ? 'home' : potentialSubdomain;
+      // Default to stream for now, but you can add logic to check if folder exists
+      subdomain = potentialSubdomain === 'www' ? 'stream' : potentialSubdomain;
     } else {
-      // Root domain or unknown - default to home
-      subdomain = 'home';
+      // Root domain or unknown - default to stream
+      subdomain = 'stream';
     }
   }
 
