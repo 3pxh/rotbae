@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useRef, useEffect } from 'react';
 import type { SimulationParams } from './types';
 import './SimulationCanvas.css';
 
@@ -7,15 +7,12 @@ interface SimulationCanvasProps {
   isRunning: boolean;
   resetTrigger: number;
   clearTrigger: number;
+  saveImageTrigger: number;
   color: string;
   renderMode: 'chalk' | 'glow' | 'histogram';
   histogramColors: { low: string; mid: string; high: string };
   speed: number;
   resetWithoutClearRef: React.MutableRefObject<boolean>;
-}
-
-export interface SimulationCanvasRef {
-  getCanvasElement: () => HTMLCanvasElement | null;
 }
 
 // Helper to convert hex to {r,g,b}
@@ -33,24 +30,20 @@ const lerp = (start: number, end: number, t: number) => {
     return start * (1 - t) + end * t;
 };
 
-export const SimulationCanvas = forwardRef<SimulationCanvasRef, SimulationCanvasProps>(({ 
+export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ 
   params, 
   isRunning, 
   resetTrigger,
   clearTrigger,
+  saveImageTrigger,
   color,
   renderMode,
   histogramColors,
   speed,
   resetWithoutClearRef
-}, ref) => {
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  
-  // Expose canvas ref to parent
-  useImperativeHandle(ref, () => ({
-    getCanvasElement: () => canvasRef.current
-  }));
   
   // Refs for simulation state to avoid closure staleness in animation loop
   const paramsRef = useRef<SimulationParams>(params);
@@ -66,10 +59,6 @@ export const SimulationCanvas = forwardRef<SimulationCanvasRef, SimulationCanvas
   const histogramRef = useRef<Uint32Array | null>(null);
   const maxHitsRef = useRef<number>(0);
   const canvasSizeRef = useRef<{w: number, h: number}>({w: 0, h: 0});
-
-  // Stats (currently unused but kept for potential future use)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_stats, setStats] = useState({ x: 0, y: 0, iterations: 0 });
 
   // Update params ref when props change
   useEffect(() => {
@@ -92,10 +81,24 @@ export const SimulationCanvas = forwardRef<SimulationCanvasRef, SimulationCanvas
     speedRef.current = speed;
   }, [speed]);
 
+  // Handle Save Image
+  useEffect(() => {
+    if (saveImageTrigger === 0) return;
+    
+    const canvas = canvasRef.current;
+    if (canvas) {
+        // Create a temporary link to download the canvas as an image
+        const link = document.createElement('a');
+        link.download = `attractor-${Date.now()}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }
+  }, [saveImageTrigger]);
+
   // Handle Reset (Positions & Histogram Data)
   useEffect(() => {
     stateRef.current = { x: 0.01, y: 0.003, iterations: 0 };
-    
+
     // Reset frame counter for consistent speed behavior
     frameCounterRef.current = 0;
 
@@ -104,32 +107,25 @@ export const SimulationCanvas = forwardRef<SimulationCanvasRef, SimulationCanvas
     // For histogram mode, clearing the histogram buffer is effectively clearing the canvas
     if (!resetWithoutClearRef.current) {
       // Clear Histogram buffer (important for histogram mode)
-    if (histogramRef.current) {
+      if (histogramRef.current) {
         histogramRef.current.fill(0);
         maxHitsRef.current = 0;
-    }
+      }
 
       // Clear canvas (for all modes: chalk, glow, histogram)
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        const prevComposite = ctx.globalCompositeOperation;
-        ctx.globalCompositeOperation = 'source-over';
-        // Use transparent background for glow and chalk modes, black for histogram
-        if (renderMode === 'glow' || renderMode === 'chalk') {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-        } else {
+      const canvas = canvasRef.current;
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          const prevComposite = ctx.globalCompositeOperation;
+          ctx.globalCompositeOperation = 'source-over';
           ctx.fillStyle = 'black';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.globalCompositeOperation = prevComposite;
         }
-        ctx.globalCompositeOperation = prevComposite;
       }
     }
-    }
-    // resetWithoutClearRef is a ref and doesn't need to be in dependencies
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resetTrigger]);
+  }, [resetTrigger, resetWithoutClearRef]);
 
   // Handle Clear (Screen only)
   useEffect(() => {
@@ -145,13 +141,8 @@ export const SimulationCanvas = forwardRef<SimulationCanvasRef, SimulationCanvas
       if (ctx) {
         const prevComposite = ctx.globalCompositeOperation;
         ctx.globalCompositeOperation = 'source-over';
-        // Use transparent background for glow and chalk modes, black for histogram
-        if (renderMode === 'glow' || renderMode === 'chalk') {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-        } else {
-          ctx.fillStyle = 'black';
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.globalCompositeOperation = prevComposite;
       }
     }
@@ -187,14 +178,8 @@ export const SimulationCanvas = forwardRef<SimulationCanvasRef, SimulationCanvas
         if (ctx) {
             ctx.scale(dpr, dpr); // Keep dpr scale for chalk/glow modes
             ctx.globalCompositeOperation = 'source-over';
-            // Use transparent background for glow and chalk modes, black for histogram
-            const currentMode = renderModeRef.current;
-            if (currentMode === 'glow' || currentMode === 'chalk') {
-              ctx.clearRect(0, 0, width, height);
-            } else {
-              ctx.fillStyle = 'black';
-              ctx.fillRect(0, 0, width, height);
-            }
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, width, height);
         }
       }
     });
@@ -243,23 +228,23 @@ export const SimulationCanvas = forwardRef<SimulationCanvasRef, SimulationCanvas
       } else {
           // Reset frame counter for speeds > 1
           frameCounterRef.current = 0;
-      
-      if (currentMode === 'histogram') {
-          // Logarithmic scaling for huge range
+          
+          if (currentMode === 'histogram') {
+              // Logarithmic scaling for huge range
               // t goes 0 to 1 (but speedVal is now 2-100, so t = (speedVal - 2) / 98)
               const t = (speedVal - 2) / 98;
               const min = 1666; // Speed 2 = ~0.1M/sec
               const max = 250000; // Speed 100 = ~10M/sec
-          // Use exponential feel: min * (max/min)^t
-          BATCH_SIZE = Math.floor(min * Math.pow(max/min, t));
-      } else {
-          // Chalk/Glow Mode
-          // Linear or gentle curve
+              // Use exponential feel: min * (max/min)^t
+              BATCH_SIZE = Math.floor(min * Math.pow(max/min, t));
+          } else {
+              // Chalk/Glow Mode
+              // Linear or gentle curve
               // t goes 0 to 1 (but speedVal is now 2-100, so t = (speedVal - 2) / 98)
               const t = (speedVal - 2) / 98;
               const min = 100; // Speed 2 = ~6k/sec
               const max = 3000; // Speed 100 = ~0.3M/sec
-          BATCH_SIZE = Math.floor(min + (max - min) * t);
+              BATCH_SIZE = Math.floor(min + (max - min) * t);
           }
       }
 
@@ -422,11 +407,6 @@ export const SimulationCanvas = forwardRef<SimulationCanvasRef, SimulationCanvas
           ctx.restore();
       }
 
-      // Update React state for stats occasionally
-      if (reqIdRef.current && reqIdRef.current % 30 === 0) {
-          setStats({ x: s.x, y: s.y, iterations: s.iterations });
-      }
-
       reqIdRef.current = requestAnimationFrame(loop);
     };
 
@@ -444,7 +424,5 @@ export const SimulationCanvas = forwardRef<SimulationCanvasRef, SimulationCanvas
        <canvas ref={canvasRef} />
     </div>
   );
-});
-
-SimulationCanvas.displayName = 'SimulationCanvas';
+};
 

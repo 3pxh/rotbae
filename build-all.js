@@ -38,6 +38,15 @@ if (fs.existsSync('utilities/package.json')) {
   }
 }
 
+console.log('\n=== Sync consent banner ===')
+try {
+  execSync('node scripts/sync-consent-banner.mjs', { stdio: 'inherit' })
+  console.log('✓ Consent banner synced to apps')
+} catch (error) {
+  console.error('✗ Failed to sync consent banner:', error.message)
+  process.exit(1)
+}
+
 subdomains.forEach(subdomain => {
   console.log(`\n=== Building ${subdomain} ===`);
   try {
