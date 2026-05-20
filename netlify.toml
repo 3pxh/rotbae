@@ -33,6 +33,12 @@
   force = false
 
 [[redirects]]
+  from = "/project/*"
+  to = "/project/index.html"
+  status = 200
+  force = false
+
+[[redirects]]
   from = "/drops/*"
   to = "/drops/index.html"
   status = 200
