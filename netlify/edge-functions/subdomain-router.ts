@@ -7,14 +7,15 @@ export default async (request: Request) => {
   const pathname = url.pathname;
 
   // List of known subdomain folders (update when adding new projects)
-  const knownSubdomains = ['stream', 'music', 'admin']; // Path prefix pass-through under rotbae.com/...
+  const knownSubdomains = ['home', 'stream', 'music', 'project', 'admin']; // Path prefix pass-through under rotbae.com/...
   
   // Map of host patterns to subdomain folders
   const hostMap: Record<string, string> = {
-    'rotbae.com': 'stream',
-    'www.rotbae.com': 'stream',
+    'rotbae.com': 'home',
+    'www.rotbae.com': 'home',
     'stream.rotbae.com': 'stream',
     'music.rotbae.com': 'music',
+    'project.rotbae.com': 'project',
   };
 
   // Check if pathname already starts with a known subdomain folder
@@ -36,10 +37,10 @@ export default async (request: Request) => {
       // Extract subdomain (first part before rotbae.com)
       const potentialSubdomain = hostParts[0];
       // Default to stream for now, but you can add logic to check if folder exists
-      subdomain = potentialSubdomain === 'www' ? 'stream' : potentialSubdomain;
+      subdomain = potentialSubdomain === 'www' ? 'home' : potentialSubdomain;
     } else {
-      // Root domain or unknown - default to stream
-      subdomain = 'stream';
+      // Root domain or unknown - default to home
+      subdomain = 'home';
     }
   }
 

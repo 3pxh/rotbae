@@ -17,6 +17,7 @@ const DEFAULT_APPS = [
   'drops',
   'home',
   'music',
+  'project',
   'patterns',
   'stream',
   'testCanvas',

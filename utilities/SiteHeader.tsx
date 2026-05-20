@@ -1,22 +1,18 @@
 import React from 'react'
 import './SiteHeader.css'
 
-export type SiteHeaderNavKey = 'music' | 'projects' | 'concepts' | 'self'
+export type SiteHeaderNavKey = 'music' | 'projects'
 
-const NAV_ORDER: SiteHeaderNavKey[] = ['music', 'projects', 'concepts', 'self']
+const NAV_ORDER: SiteHeaderNavKey[] = ['music', 'projects']
 
 const NAV_LABELS: Record<SiteHeaderNavKey, string> = {
   music: 'MUSIC',
   projects: 'PROJECTS',
-  concepts: 'CONCEPTS',
-  self: 'SELF',
 }
 
 export const DEFAULT_SITE_HEADER_NAV_HREFS: Record<SiteHeaderNavKey, string> = {
   music: 'https://music.rotbae.com',
-  projects: 'https://projects.rotbae.com',
-  concepts: 'https://concepts.rotbae.com',
-  self: 'https://self.rotbae.com',
+  projects: 'https://project.rotbae.com',
 }
 
 export interface SiteHeaderProps {
