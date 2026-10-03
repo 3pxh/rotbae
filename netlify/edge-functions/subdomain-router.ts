@@ -6,9 +6,18 @@ export default async (request: Request) => {
   const host = request.headers.get('host') || '';
   const pathname = url.pathname;
 
-  // List of known subdomain folders (update when adding new projects)
-  const knownSubdomains = ['home', 'stream', 'music', 'project', 'admin']; // Path prefix pass-through under rotbae.com/...
-  
+  // List of known subdomain folders (update when adding new projects).
+  // IMPORTANT: this must include every deployable folder, not just the ones
+  // with a dedicated subdomain. Returning a URL below re-invokes this edge
+  // function with the rewritten path, so any real folder missing from this
+  // list fails the pass-through check on that second invocation and gets
+  // rewritten again (e.g. /void/index.html -> /void/void/index.html -> ...),
+  // looping until Netlify kills the function ("edge function has crashed").
+  const knownSubdomains = [
+    'home', 'stream', 'music', 'project', 'void', 'patterns',
+    'aiornot', 'baeday', 'drops', 'testCanvas', 'admin',
+  ]; // Path prefix pass-through under rotbae.com/...
+
   // Map of host patterns to subdomain folders
   const hostMap: Record<string, string> = {
     'rotbae.com': 'home',
@@ -16,6 +25,11 @@ export default async (request: Request) => {
     'stream.rotbae.com': 'stream',
     'music.rotbae.com': 'music',
     'project.rotbae.com': 'project',
+    'void.rotbae.com': 'void',
+    'patterns.rotbae.com': 'patterns',
+    'aiornot.rotbae.com': 'aiornot',
+    'baeday.rotbae.com': 'baeday',
+    'drops.rotbae.com': 'drops',
   };
 
   // Check if pathname already starts with a known subdomain folder
